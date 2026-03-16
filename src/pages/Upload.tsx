@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UploadCloud, File, FileText, CheckCircle } from 'lucide-react';
 
+// 전역 상태 상자를 꺼내오기 위한 Hook
+import { useAppContext } from '../context/AppContext';
+
 const Upload: React.FC = () => {
   const navigate = useNavigate();
-  // 선택된 파일 정보를 가지고 있는 state
-  const [file, setFile] = useState<File | null>(null);
+  
+  // AppContext 상자 안에서 `file`과 파일을 저장하는 함수(`setFile`)를 꺼내옵니다!
+  // 기존의 useState는 이 페이지를 벗어나면 날아가지만, 
+  // Context에 담은 file은 Result 페이지에 도착할 때까지 살아있습니다.
+  const { file, setFile } = useAppContext();
 
   // 숨겨진 원본 file input을 조작하기 위한 껍데기 함수 (선택 창 띄우기)
   const handleUploadClick = () => {
@@ -15,6 +21,7 @@ const Upload: React.FC = () => {
   // 파일이 첨부되었을 때 실행되는 함수
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
+      // 선택된 파일을 상자(Context) 안에 넣습니다.
       setFile(e.target.files[0]);
     }
   };
@@ -22,10 +29,11 @@ const Upload: React.FC = () => {
   // 다음 단계로 넘어가기 전 로딩 처리
   const handleNext = () => {
     if (file) {
-      // 나중에 이 부분에서 실제 백엔드 API 서버로 파일을 전송(Fetch) 하는 로직이 들어갑니다.
+      // Loading 페이지로 이동하면, Loading 페이지가 알아서 상자 안의 파일을 꺼내 서버로 보낼 것입니다!
       navigate('/loading'); 
     }
   };
+
 
   return (
     <div style={{

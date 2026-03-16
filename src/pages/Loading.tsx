@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
+import { useAppContext } from '../context/AppContext';
 
 const Loading: React.FC = () => {
   const navigate = useNavigate();
+  const { file, setResult } = useAppContext();
   const [dots, setDots] = useState('');
-
-  // 1초 단위로 '점(...)'이 늘어나는 애니메이션 효과
+  
+  // 1초 단위로 '점(...)'이 늘어나는 애니메이션
   useEffect(() => {
     const interval = setInterval(() => {
       setDots(prev => (prev.length >= 3 ? '' : prev + '.'));
@@ -14,13 +16,39 @@ const Loading: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // 실제 백엔드 연동 전 임시로 3초 대기 후 결과창으로 넘어가는 효과
+  // 실제 API 호출(모의) 로직
   useEffect(() => {
+    // 1. 파일이 없으면 튕겨냅니다 (비정상 접근 방지)
+    if (!file) {
+      alert('업로드된 성적표가 없습니다. 첫 화면으로 돌아갑니다.');
+      navigate('/');
+      return;
+    }
+
+    // 2. 여기서 진짜라면 fetch('http://api.sejong.ac.kr/upload', { body: formData }) 를 호출합니다.
+    // 지금은 백엔드가 없으므로, setTimeout으로 3초 대기 후 가짜 응답을 만들었다고 칩니다.
     const timer = setTimeout(() => {
+      const mockBackendResponse = {
+        studentName: "김세종",
+        studentId: "19000001",
+        totalTargetCredit: 109,
+        totalCurrentCredit: 84,
+        details: [
+          { category: "MSC (기초교양)", target: 30, current: 30, status: "PASS" as const },
+          { category: "전공주제", target: 60, current: 45, status: "FAIL_REMAINING" as const },
+          { category: "전문교양", target: 14, current: 11, status: "FAIL_REMAINING" as const }
+        ]
+      };
+
+      // 3. 백엔드가 준 JSON 뭉치를 내 Context 상자에 얌전히 담습니다.
+      setResult(mockBackendResponse);
+      
+      // 4. 상자에 담았으니 결과창으로 화면을 강제 이동시킵니다!
       navigate('/result');
     }, 3000);
+
     return () => clearTimeout(timer);
-  }, [navigate]);
+  }, [file, navigate, setResult]);
 
   return (
     <div style={{
@@ -33,11 +61,6 @@ const Loading: React.FC = () => {
       padding: '3rem',
       textAlign: 'center'
     }}>
-      {/* 
-        lucide-react의 Loader2 아이콘に CSS 애니메이션을 적용하여 
-        무한히 빙글빙글 도는 스피너를 구현합니다. (현재는 inline 스타일로 spin 지원 안됨)
-        따라서 index.css 에 작성된 커스텀 애니메이션 클래스(animate-spin)를 활용합니다.
-      */}
       <style>
         {`
           @keyframes spin {
@@ -59,6 +82,8 @@ const Loading: React.FC = () => {
         성적표를 분석하고 있습니다{dots}
       </h2>
       <p style={{ color: 'var(--text-secondary)' }}>
+        파일: {file?.name}
+        <br/><br/>
         잠시만 기다려주세요. (최대 1~2분 소요될 수 있습니다.)
       </p>
     </div>
