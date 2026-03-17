@@ -18,11 +18,35 @@ const Upload: React.FC = () => {
     document.getElementById('hiddenFileInput')?.click();
   };
 
-  // 파일이 첨부되었을 때 실행되는 함수
+  // 파일이 첨부되었을 때 실행되는 1차 검증 함수
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      // 선택된 파일을 상자(Context) 안에 넣습니다.
-      setFile(e.target.files[0]);
+      const selectedFile = e.target.files[0];
+      
+      // 방어막 1: 파일 용량 제한 (5MB)
+      const MAX_SIZE = 5 * 1024 * 1024;
+      if (selectedFile.size > MAX_SIZE) {
+        alert('파일 크기가 너무 큽니다. 5MB 이하의 파일만 업로드 가능합니다.');
+        return; // 백엔드로 넘기지 않고 여기서 차단!
+      }
+
+      // 방어막 2: 확장자 및 진짜 MIME 타입(파일 조작 방지) 동시 검사 (오직 엑셀만 허용)
+      const validExtensions = ['.xlsx', '.xls'];
+      const validMimeTypes = [
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+        'application/vnd.ms-excel' // .xls
+      ];
+
+      const fileExtension = selectedFile.name.toLowerCase().substring(selectedFile.name.lastIndexOf('.'));
+      
+      // 확장자도 맞으면서 브라우저가 인식한 진짜 파일 속성(type)도 허용 목록에 있어야 통과
+      if (!validExtensions.includes(fileExtension) || (selectedFile.type && !validMimeTypes.includes(selectedFile.type))) {
+        alert('지원하지 않는 파일 형식입니다. 조작되지 않은 정상적인 엑셀(XLSX, XLS) 파일만 올려주세요.');
+        return;
+      }
+
+      // 모든 검증을 통과한 깨끗한 파일만 상자(Context) 안에 넣습니다.
+      setFile(selectedFile);
     }
   };
 
@@ -48,7 +72,7 @@ const Upload: React.FC = () => {
       </div>
 
       <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', lineHeight: 1.5 }}>
-        학교 포털사이트에서 다운로드 받은 '기이수 성적표(PDF 혹은 Excel)' 파일을 아래에 업로드해주세요.<br/>
+        학교 포털사이트에서 다운로드 받은 '기이수 성적표(Excel)' 파일을 아래에 업로드해주세요.<br/>
         문서 및 개인정보는 분석 즉시 파기됩니다.
       </p>
 
@@ -80,7 +104,7 @@ const Upload: React.FC = () => {
         <input 
           id="hiddenFileInput"
           type="file" 
-          accept=".pdf,.xlsx,.csv"
+          accept=".xlsx,.xls"
           onChange={handleFileChange}
           style={{ display: 'none' }}
         />
@@ -102,7 +126,7 @@ const Upload: React.FC = () => {
             <UploadCloud size={48} color="var(--color-primary)" />
             <div style={{ textAlign: 'center' }}>
               <p style={{ fontWeight: 700, fontSize: '1.2rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>클릭하여 성적표 파일 찾기</p>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>지원되는 파일 형식: PDF, XLSX, CSV</p>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>지원되는 파일 형식: 엑셀 (XLSX, XLS)</p>
             </div>
           </>
         )}

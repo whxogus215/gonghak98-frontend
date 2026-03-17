@@ -4,9 +4,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 // 통합 레이아웃(중앙 정렬 카드 UI)
 import StepLayout from './layouts/StepLayout';
 
-// 5단계 페이지
+// 4단계 페이지 (Quiz 제외)
 import Landing from './pages/Landing';
-import Quiz from './pages/Quiz';
 import Upload from './pages/Upload';
 import Loading from './pages/Loading';
 import ResultDashboard from './pages/ResultDashboard';
@@ -27,7 +26,6 @@ const App: React.FC = () => {
             <Route index element={<Landing />} />
             
             {/* 단계벌 플로우 */}
-            <Route path="quiz" element={<Quiz />} />
             <Route path="upload" element={<Upload />} />
             <Route path="loading" element={<Loading />} />
             <Route path="result" element={<ResultDashboard />} />
