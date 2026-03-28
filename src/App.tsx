@@ -6,6 +6,7 @@ import StepLayout from './layouts/StepLayout';
 
 // 4단계 페이지 (Quiz 제외)
 import Landing from './pages/Landing';
+import DepartmentSelect from './pages/DepartmentSelect';
 import Upload from './pages/Upload';
 import Loading from './pages/Loading';
 import ResultDashboard from './pages/ResultDashboard';
@@ -25,7 +26,8 @@ const App: React.FC = () => {
             {/* 최초 접속 화면 */}
             <Route index element={<Landing />} />
             
-            {/* 단계벌 플로우 */}
+            {/* 단계별 플로우 */}
+            <Route path="department" element={<DepartmentSelect />} />
             <Route path="upload" element={<Upload />} />
             <Route path="loading" element={<Loading />} />
             <Route path="result" element={<ResultDashboard />} />

@@ -38,6 +38,8 @@ export interface AnalysisResult {
 
 // 이 '상자(Context)'가 보관할 정보의 구조를 정의합니다.
 interface AppContextType {
+  departmentName: string | null;
+  setDepartmentName: (name: string | null) => void;
   file: File | null;             // 업로드 한 파일 객체
   setFile: (file: File | null) => void;
   result: AnalysisResult | null; // 백엔드에서 받은 결과 JSON
@@ -49,11 +51,12 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 // 이 상자를 전역(App.tsx 수준)에서 쓸 수 있도록 감싸주는 덮개 컴포넌트입니다.
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [departmentName, setDepartmentName] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [result, setResult] = useState<AnalysisResult | null>(null);
 
   return (
-    <AppContext.Provider value={{ file, setFile, result, setResult }}>
+    <AppContext.Provider value={{ departmentName, setDepartmentName, file, setFile, result, setResult }}>
       {children}
     </AppContext.Provider>
   );

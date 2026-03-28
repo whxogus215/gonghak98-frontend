@@ -5,7 +5,7 @@ import { useAppContext } from '../context/AppContext';
 
 const Loading: React.FC = () => {
   const navigate = useNavigate();
-  const { file, setResult } = useAppContext();
+  const { departmentName, file, setResult } = useAppContext();
   const [dots, setDots] = useState('');
 
   // 1초 단위로 '점(...)'이 늘어나는 애니메이션
@@ -18,9 +18,9 @@ const Loading: React.FC = () => {
 
   // 실제 API 호출(모의) 로직
   useEffect(() => {
-    // 1. 파일이 없으면 튕겨냅니다 (비정상 접근 방지)
-    if (!file) {
-      alert('업로드된 성적표가 없습니다. 첫 화면으로 돌아갑니다.');
+    // 1. 파일이나 학과 정보가 없으면 튕겨냅니다 (비정상 접근 방지)
+    if (!file || !departmentName) {
+      alert('필수 정보가 누락되었습니다. 첫 화면으로 돌아갑니다.');
       navigate('/');
       return;
     }
@@ -31,8 +31,8 @@ const Loading: React.FC = () => {
     const uploadFile = async () => {
       try {
         const formData = new FormData();
-        // API 명세에 맞춰 departmentName (text/plain) 추가 (예시: 전자정보통신공학과)
-        formData.append('departmentName', new Blob(['전자정보통신공학과'], { type: 'text/plain' }));
+        // API 명세에 맞춰 departmentName (text/plain) 동적 전송
+        formData.append('departmentName', new Blob([departmentName], { type: 'text/plain' }));
         // 실제 성적표 파일 추가
         formData.append('file', file);
 

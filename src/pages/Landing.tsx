@@ -41,10 +41,10 @@ const Landing: React.FC = () => {
 
       {/* 
         시작 버튼 
-        클릭 시 업로드 페이지(/upload)로 바로 넘어갑니다.
+        클릭 시 학과 선택 페이지(/department)로 바로 넘어갑니다.
       */}
       <button 
-        onClick={() => navigate('/upload')}
+        onClick={() => navigate('/department')}
         style={{
           display: 'flex',
           alignItems: 'center',

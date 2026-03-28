@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UploadCloud, File, FileText, CheckCircle } from 'lucide-react';
 
@@ -8,10 +8,16 @@ import { useAppContext } from '../context/AppContext';
 const Upload: React.FC = () => {
   const navigate = useNavigate();
   
-  // AppContext 상자 안에서 `file`과 파일을 저장하는 함수(`setFile`)를 꺼내옵니다!
-  // 기존의 useState는 이 페이지를 벗어나면 날아가지만, 
-  // Context에 담은 file은 Result 페이지에 도착할 때까지 살아있습니다.
-  const { file, setFile } = useAppContext();
+  // AppContext 상자 안에서 `departmentName`, `file`과 파일을 저장하는 함수(`setFile`)를 꺼내옵니다.
+  const { departmentName, file, setFile } = useAppContext();
+
+  // 사용자가 학과를 선택하지 않고 바로 넘어온 경우 방어
+  useEffect(() => {
+    if (!departmentName) {
+      alert('소속 학과를 먼저 선택해주세요.');
+      navigate('/department');
+    }
+  }, [departmentName, navigate]);
 
   // 숨겨진 원본 file input을 조작하기 위한 껍데기 함수 (선택 창 띄우기)
   const handleUploadClick = () => {
