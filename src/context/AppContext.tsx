@@ -2,19 +2,38 @@ import React, { createContext, useContext, useState, type ReactNode } from 'reac
 
 // 백엔드에서 넘겨줄 분석 결과의 데이터 형태(타입)를 정의합니다.
 // 타입스크립트의 장점: 이 형태를 벗어난 데이터가 들어오면 코드를 짤 때 즉시 에러가 납니다.
-export interface DetailItem {
-  category: string;
-  target: number;
-  current: number;
-  status: 'PASS' | 'FAIL_REMAINING';
+export interface Course {
+  courseId: number;
+  name: string;
+  year: number;
+  semester: number;
+  point: number;
+}
+
+export interface CreditSummary {
+  areaType: string;
+  completedPoints: number;
+  requiredPoints: number;
+  relatedCourses: Course[];
+}
+
+export interface PassResult {
+  areaType: string;
+  isPassed: boolean;
+}
+
+export interface NonPassResult {
+  courseId: number;
+  reason: string;
 }
 
 export interface AnalysisResult {
-  studentName: string;
-  studentId: string;
-  totalTargetCredit: number;
-  totalCurrentCredit: number;
-  details: DetailItem[];
+  id: string;
+  studentName?: string;
+  studentId?: string;
+  passResults: PassResult[];
+  nonPassResults: NonPassResult[];
+  creditSummaries: CreditSummary[];
 }
 
 // 이 '상자(Context)'가 보관할 정보의 구조를 정의합니다.

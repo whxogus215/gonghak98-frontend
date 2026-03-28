@@ -7,7 +7,7 @@ const Loading: React.FC = () => {
   const navigate = useNavigate();
   const { file, setResult } = useAppContext();
   const [dots, setDots] = useState('');
-  
+
   // 1초 단위로 '점(...)'이 늘어나는 애니메이션
   useEffect(() => {
     const interval = setInterval(() => {
@@ -25,29 +25,47 @@ const Loading: React.FC = () => {
       return;
     }
 
-    // 2. 여기서 진짜라면 fetch('http://api.sejong.ac.kr/upload', { body: formData }) 를 호출합니다.
-    // 지금은 백엔드가 없으므로, setTimeout으로 3초 대기 후 가짜 응답을 만들었다고 칩니다.
-    const timer = setTimeout(() => {
-      const mockBackendResponse = {
-        studentName: "김세종",
-        studentId: "19000001",
-        totalTargetCredit: 109,
-        totalCurrentCredit: 84,
-        details: [
-          { category: "MSC (기초교양)", target: 30, current: 30, status: "PASS" as const },
-          { category: "전공주제", target: 60, current: 45, status: "FAIL_REMAINING" as const },
-          { category: "전문교양", target: 14, current: 11, status: "FAIL_REMAINING" as const }
-        ]
-      };
+    // 2. 실제 백엔드 API (localhost:8080) 호출을 진행합니다.
+    const abortController = new AbortController();
 
-      // 3. 백엔드가 준 JSON 뭉치를 내 Context 상자에 얌전히 담습니다.
-      setResult(mockBackendResponse);
-      
-      // 4. 상자에 담았으니 결과창으로 화면을 강제 이동시킵니다!
-      navigate('/result');
-    }, 3000);
+    const uploadFile = async () => {
+      try {
+        const formData = new FormData();
+        // API 명세에 맞춰 departmentName (text/plain) 추가 (예시: 전자정보통신공학과)
+        formData.append('departmentName', new Blob(['전자정보통신공학과'], { type: 'text/plain' }));
+        // 실제 성적표 파일 추가
+        formData.append('file', file);
 
-    return () => clearTimeout(timer);
+        const response = await fetch('http://localhost:8080/api/reports', {
+          method: 'POST',
+          body: formData,
+          signal: abortController.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(`서버 응답 오류: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // 3. 백엔드가 파싱해준 JSON 뭉치를 Context 상자에 담습니다.
+        setResult(data);
+
+        // 4. 분석 결과창으로 화면을 이동시킵니다!
+        navigate('/result');
+      } catch (error: any) {
+        // 컴포넌트 언마운트로 인한 정상 취소는 무시합니다.
+        if (error.name === 'AbortError') return;
+
+        console.error('파일 업로드 및 분석 중 에러 발생:', error);
+        alert('파일 분석 중 오류가 발생했습니다. 백엔드 서버가 켜져 있는지 확인해주세요.');
+        navigate('/');
+      }
+    };
+
+    uploadFile();
+
+    return () => abortController.abort();
   }, [file, navigate, setResult]);
 
   return (
@@ -73,7 +91,7 @@ const Loading: React.FC = () => {
           }
         `}
       </style>
-      
+
       <div className="spinner" style={{ marginBottom: '2rem' }}>
         <Loader2 size={48} />
       </div>
@@ -83,7 +101,7 @@ const Loading: React.FC = () => {
       </h2>
       <p style={{ color: 'var(--text-secondary)' }}>
         파일: {file?.name}
-        <br/><br/>
+        <br /><br />
         잠시만 기다려주세요. (최대 1~2분 소요될 수 있습니다.)
       </p>
     </div>
