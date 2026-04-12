@@ -5,7 +5,7 @@ import { useAppContext } from '../context/AppContext';
 
 const Loading: React.FC = () => {
   const navigate = useNavigate();
-  const { departmentName, file, setResult } = useAppContext();
+  const { departmentName, entranceYear, file, setResult } = useAppContext();
   const [dots, setDots] = useState('');
 
   // 1초 단위로 '점(...)'이 늘어나는 애니메이션
@@ -18,8 +18,8 @@ const Loading: React.FC = () => {
 
   // 실제 API 호출(모의) 로직
   useEffect(() => {
-    // 1. 파일이나 학과 정보가 없으면 튕겨냅니다 (비정상 접근 방지)
-    if (!file || !departmentName) {
+    // 1. 파일이나 학과/입학년도 정보가 없으면 튕겨냅니다 (비정상 접근 방지)
+    if (!file || !departmentName || !entranceYear) {
       alert('필수 정보가 누락되었습니다. 첫 화면으로 돌아갑니다.');
       navigate('/');
       return;
@@ -31,8 +31,9 @@ const Loading: React.FC = () => {
     const uploadFile = async () => {
       try {
         const formData = new FormData();
-        // API 명세에 맞춰 departmentName (text/plain) 동적 전송
-        formData.append('departmentName', new Blob([departmentName], { type: 'text/plain' }));
+        // 백엔드(Spring)가 해당 필드들을 MultipartFile이 아닌 String으로 받을 수 있도록, Blob 래핑을 제거하고 일반 텍스트로 보냅니다.
+        formData.append('departmentName', departmentName);
+        formData.append('entranceYear', entranceYear);
         // 실제 성적표 파일 추가
         formData.append('file', file);
 
@@ -66,7 +67,7 @@ const Loading: React.FC = () => {
     uploadFile();
 
     return () => abortController.abort();
-  }, [file, navigate, setResult]);
+  }, [file, departmentName, entranceYear, navigate, setResult]);
 
   return (
     <div style={{

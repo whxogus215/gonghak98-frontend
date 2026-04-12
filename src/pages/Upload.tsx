@@ -8,16 +8,15 @@ import { useAppContext } from '../context/AppContext';
 const Upload: React.FC = () => {
   const navigate = useNavigate();
   
-  // AppContext 상자 안에서 `departmentName`, `file`과 파일을 저장하는 함수(`setFile`)를 꺼내옵니다.
-  const { departmentName, file, setFile } = useAppContext();
+  const { departmentName, entranceYear, file, setFile } = useAppContext();
 
-  // 사용자가 학과를 선택하지 않고 바로 넘어온 경우 방어
+  // 사용자가 학과나 입학년도를 선택하지 않고 바로 넘어온 경우 방어
   useEffect(() => {
-    if (!departmentName) {
-      alert('소속 학과를 먼저 선택해주세요.');
+    if (!departmentName || !entranceYear) {
+      alert('소속 학과 및 입학년도를 먼저 선택해주세요.');
       navigate('/department');
     }
-  }, [departmentName, navigate]);
+  }, [departmentName, entranceYear, navigate]);
 
   // 숨겨진 원본 file input을 조작하기 위한 껍데기 함수 (선택 창 띄우기)
   const handleUploadClick = () => {
