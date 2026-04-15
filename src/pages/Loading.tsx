@@ -25,7 +25,7 @@ const Loading: React.FC = () => {
       return;
     }
 
-    // 2. 실제 백엔드 API (localhost:8080) 호출을 진행합니다.
+    // 2. 실제 백엔드 API 호출을 진행합니다.
     const abortController = new AbortController();
 
     const uploadFile = async () => {
@@ -36,8 +36,8 @@ const Loading: React.FC = () => {
         formData.append('entranceYear', entranceYear);
         // 실제 성적표 파일 추가
         formData.append('file', file);
-
-        const response = await fetch('http://localhost:8080/api/reports', {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+        const response = await fetch(`${apiUrl}/api/reports`, {
           method: 'POST',
           body: formData,
           signal: abortController.signal,
