@@ -9,18 +9,11 @@ const DepartmentSelect: React.FC = () => {
 
   // 사용자 입력을 위한 대표적인 학과 예시 목록입니다.
   const departments = [
-    '전자정보통신공학과',
-    '컴퓨터공학과',
-    '정보보호학과',
-    '소프트웨어학과',
-    '데이터사이언스학과',
-    '인공지능학과',
-    '기계공학과',
-    '우주항공공학과'
+    '전자정보통신공학과'
   ];
 
-  // 최근 학번 리스트 (예: 2015 ~ 2025)
-  const entranceYears = Array.from({ length: 10 }, (_, i) => String(2025 - i)).reverse();
+  // 최근 학번 리스트 (2024 ~ 2025)
+  const entranceYears = Array.from({ length: 2 }, (_, i) => String(2025 - i));
 
   const handleNext = () => {
     if (departmentName && entranceYear) {
