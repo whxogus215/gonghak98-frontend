@@ -21,7 +21,7 @@ function ResultDashboard() {
   const percentage = Math.min(Math.round((totalCurrentCredit / Math.max(totalTargetCredit, 1)) * 100), 100);
 
   const getAreaLabel = (areaType: string) => {
-    switch(areaType) {
+    switch (areaType) {
       case 'MSC': return 'MSC (기초/교양)';
       case 'BSM': return 'BSM (수/과/전산)';
       case 'MAJOR': return '전공 영역';
@@ -52,29 +52,10 @@ function ResultDashboard() {
             </p>
           </div>
         </div>
-        
-        <button style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          padding: '0.75rem 1.25rem',
-          backgroundColor: 'white',
-          border: '1px solid #e2e8f0',
-          borderRadius: '10px',
-          color: '#475569',
-          cursor: 'pointer',
-          fontWeight: 600,
-          fontSize: '0.95rem',
-          boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-          transition: 'all 0.2s ease',
-        }} onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#f1f5f9')}
-           onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'white')}>
-          <Download size={18} /> PDF 다운로드
-        </button>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', flex: 1, overflowY: 'auto', paddingRight: '0.5rem', paddingBottom: '2rem' }}>
-        
+
         {/* 미충족 경고 영역 */}
         {result.nonPassResults && result.nonPassResults.length > 0 && (
           <div style={{
@@ -100,7 +81,7 @@ function ResultDashboard() {
 
         {/* 상단 통계 영역 (진행률 & 영역별 통과 여부) */}
         <div style={{ display: 'grid', gridTemplateColumns: 'minmax(300px, 1fr) minmax(300px, 1fr)', gap: '1.5rem', flexWrap: 'wrap' }}>
-          
+
           {/* 전체 진행률 */}
           <div style={{
             backgroundColor: 'white',
@@ -162,7 +143,7 @@ function ResultDashboard() {
                   minHeight: '60px'
                 }}>
                   <span style={{ fontWeight: 600, color: pr.isPassed ? '#166534' : '#475569', fontSize: '0.95rem' }}>{getAreaLabel(pr.areaType)}</span>
-                  <div style={{flexShrink: 0, marginLeft: '8px'}}>
+                  <div style={{ flexShrink: 0, marginLeft: '8px' }}>
                     {pr.isPassed ? <CheckCircle size={20} color="#22c55e" /> : <XCircle size={20} color="#94a3b8" />}
                   </div>
                 </div>
@@ -222,7 +203,7 @@ function ResultDashboard() {
                       </span>
                     </div>
                   </div>
-                  
+
                   {/* 수강 과목 리스트 */}
                   <div style={{ padding: '1rem 1.5rem', flex: 1, backgroundColor: 'white' }}>
                     {summary.relatedCourses && summary.relatedCourses.length > 0 ? (
@@ -254,7 +235,7 @@ function ResultDashboard() {
 
       {/* 하단 홈으로 돌아가기 버튼 */}
       <div style={{ paddingTop: '1.5rem', borderTop: '1px solid #e2e8f0', display: 'flex', justifyContent: 'center', backgroundColor: '#f8fafc' }}>
-        <button 
+        <button
           onClick={() => navigate('/')}
           style={{
             display: 'flex',
