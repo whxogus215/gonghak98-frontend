@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UploadCloud, File, FileText, CheckCircle } from 'lucide-react';
+import { UploadCloud, File, FileText, CheckCircle, Info } from 'lucide-react';
 
 // 전역 상태 상자를 꺼내오기 위한 Hook
 import { useAppContext } from '../context/AppContext';
 
 const Upload: React.FC = () => {
   const navigate = useNavigate();
-  
+
   const { departmentName, entranceYear, file, setFile } = useAppContext();
 
   // 사용자가 학과나 입학년도를 선택하지 않고 바로 넘어온 경우 방어
@@ -27,7 +27,7 @@ const Upload: React.FC = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const selectedFile = e.target.files[0];
-      
+
       // 방어막 1: 파일 용량 제한 (5MB)
       const MAX_SIZE = 5 * 1024 * 1024;
       if (selectedFile.size > MAX_SIZE) {
@@ -43,10 +43,10 @@ const Upload: React.FC = () => {
       ];
 
       const fileExtension = selectedFile.name.toLowerCase().substring(selectedFile.name.lastIndexOf('.'));
-      
+
       // 확장자도 맞으면서 브라우저가 인식한 진짜 파일 속성(type)도 허용 목록에 있어야 통과
       if (!validExtensions.includes(fileExtension) || (selectedFile.type && !validMimeTypes.includes(selectedFile.type))) {
-        alert('지원하지 않는 파일 형식입니다. 조작되지 않은 정상적인 엑셀(XLSX, XLS) 파일만 올려주세요.');
+        alert('지원하지 않는 파일 형식입니다. 조작되지 않은 정상적인 엑셀(XLSX) 파일만 올려주세요.');
         return;
       }
 
@@ -59,7 +59,7 @@ const Upload: React.FC = () => {
   const handleNext = () => {
     if (file) {
       // Loading 페이지로 이동하면, Loading 페이지가 알아서 상자 안의 파일을 꺼내 서버로 보낼 것입니다!
-      navigate('/loading'); 
+      navigate('/loading');
     }
   };
 
@@ -77,12 +77,12 @@ const Upload: React.FC = () => {
       </div>
 
       <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', lineHeight: 1.5 }}>
-        학교 포털사이트에서 다운로드 받은 '기이수 성적표(Excel)' 파일을 아래에 업로드해주세요.<br/>
-        문서 및 개인정보는 분석 즉시 파기됩니다.
+        세종대학교 포털사이트에서 다운로드 받은 '기이수성적조회(Excel)' 파일을 아래에 업로드해주세요.<br />
+        업로드 된 파일은 분석 즉시 파기됩니다.
       </p>
 
       {/* 업로드 박스 (점선 영역) */}
-      <div 
+      <div
         onClick={handleUploadClick}
         style={{
           border: `2px dashed ${file ? 'var(--color-success)' : 'var(--color-primary-light)'}`,
@@ -99,16 +99,16 @@ const Upload: React.FC = () => {
           flex: 1
         }}
         onMouseOver={(e) => {
-          if(!file) e.currentTarget.style.backgroundColor = '#FEE2E2';
+          if (!file) e.currentTarget.style.backgroundColor = '#FEE2E2';
         }}
         onMouseOut={(e) => {
-          if(!file) e.currentTarget.style.backgroundColor = '#FEF2F2';
+          if (!file) e.currentTarget.style.backgroundColor = '#FEF2F2';
         }}
       >
         {/* 숨김 처리된 실제 HTML 첨부 인풋 박스 */}
-        <input 
+        <input
           id="hiddenFileInput"
-          type="file" 
+          type="file"
           accept=".xlsx,.xls"
           onChange={handleFileChange}
           style={{ display: 'none' }}
@@ -131,15 +131,47 @@ const Upload: React.FC = () => {
             <UploadCloud size={48} color="var(--color-primary)" />
             <div style={{ textAlign: 'center' }}>
               <p style={{ fontWeight: 700, fontSize: '1.2rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>클릭하여 성적표 파일 찾기</p>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>지원되는 파일 형식: 엑셀 (XLSX, XLS)</p>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>지원되는 파일 형식: .xlsx</p>
             </div>
           </>
         )}
       </div>
 
+      {/* 상시 노출 안내 요소 (Callout Box) */}
+      <div style={{
+        marginTop: '1.5rem',
+        padding: '1.25rem',
+        backgroundColor: '#F8FAFC',
+        borderRadius: '12px',
+        border: '1px solid #E2E8F0',
+        display: 'flex',
+        gap: '1rem',
+        alignItems: 'flex-start'
+      }}>
+        <Info size={20} color="var(--color-primary)" style={{ flexShrink: 0, marginTop: '2px' }} />
+        <div>
+          <h3 style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-primary)', margin: '0 0 0.5rem 0' }}>
+            기이수 성적표 다운로드 방법
+          </h3>
+          <ol style={{
+            margin: 0,
+            paddingLeft: '1.2rem',
+            color: 'var(--text-secondary)',
+            fontSize: '0.9rem',
+            lineHeight: 1.6,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.25rem'
+          }}>
+            <li>세종대학교 포털에 로그인하여 학사정보시스템에 접속합니다.</li>
+            <li><strong>[수업/성적] - [성적 및 강의평가] - [기이수성적조회]</strong> 페이지에서 성적 파일 다운로드가 가능합니다.</li>
+          </ol>
+        </div>
+      </div>
+
       {/* 하단 네비게이션 버튼 영역 */}
       <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '1.5rem', marginTop: '1.5rem', borderTop: '1px solid var(--border-color)' }}>
-        <button 
+        <button
           onClick={() => navigate(-1)} // 뒤로가기
           style={{
             padding: '0.75rem 1.5rem',
@@ -153,8 +185,8 @@ const Upload: React.FC = () => {
         >
           이전으로
         </button>
-        
-        <button 
+
+        <button
           onClick={handleNext}
           style={{
             padding: '0.75rem 2rem',
