@@ -37,17 +37,27 @@ const Loading: React.FC = () => {
         // 실제 성적표 파일 추가
         formData.append('file', file);
         const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
-        const response = await fetch(`${apiUrl}/api/reports`, {
-          method: 'POST',
-          body: formData,
-          signal: abortController.signal,
-        });
+        // 최소 유지 시간 (3초) 타이머 
+        const minWaitPromise = new Promise(resolve => setTimeout(resolve, 3000));
 
-        if (!response.ok) {
-          throw new Error(`서버 응답 오류: ${response.status}`);
-        }
+        // 실제 서버 API 요청
+        const apiPromise = (async () => {
+          const response = await fetch(`${apiUrl}/api/reports`, {
+            method: 'POST',
+            body: formData,
+            signal: abortController.signal,
+          });
 
-        const data = await response.json();
+          if (!response.ok) {
+            throw new Error(`서버 응답 오류: ${response.status}`);
+          }
+
+          return response.json();
+        })();
+
+        // 두 작업이 모두 끝날 때까지 대기
+        const [data] = await Promise.all([apiPromise, minWaitPromise]);
+
 
         // 3. 백엔드가 파싱해준 JSON 뭉치를 Context 상자에 담습니다.
         setResult(data);
@@ -100,11 +110,29 @@ const Loading: React.FC = () => {
       <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
         성적표를 분석하고 있습니다{dots}
       </h2>
-      <p style={{ color: 'var(--text-secondary)' }}>
+      <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
         파일: {file?.name}
         <br /><br />
         잠시만 기다려주세요. (최대 1~2분 소요될 수 있습니다.)
       </p>
+
+      {/* 안내 문구 영역 (Disclaimer) */}
+      <div style={{
+        marginTop: '1rem',
+        padding: '1.25rem 1.5rem',
+        backgroundColor: '#FFFBEB',
+        border: '1px solid #FDE68A',
+        borderRadius: '12px',
+        maxWidth: '500px',
+        color: '#92400E',
+        fontSize: '0.95rem',
+        lineHeight: 1.6,
+        fontWeight: 500,
+        boxShadow: '0 2px 10px rgba(0,0,0,0.02)'
+      }}>
+        해당 내용은 참고용으로 활용하시기 바랍니다.<br />
+        자세한 사항은 소속된 공학인증 센터에 문의하시기 바랍니다.
+      </div>
     </div>
   );
 };
