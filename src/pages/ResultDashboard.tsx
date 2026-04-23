@@ -340,8 +340,13 @@ function ResultDashboard() {
                   {/* 카드 헤더 (진행 상태) */}
                   <div style={{ padding: '1.25rem 1.5rem', backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                      <h4 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: '#334155' }}>
+                      <h4 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: '#334155', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         {getAreaLabel(summary.areaType)}
+                        {summary.areaType === 'DESIGN' && (
+                          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', backgroundColor: '#e2e8f0', padding: '3px 8px', borderRadius: '6px' }}>
+                            설계 학점 기준
+                          </span>
+                        )}
                       </h4>
                       <span style={{
                         padding: '4px 10px',
@@ -364,8 +369,8 @@ function ResultDashboard() {
                           borderRadius: '999px'
                         }}></div>
                       </div>
-                      <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#475569', minWidth: '60px', textAlign: 'right' }}>
-                        {summary.completedCredits} / {summary.requiredCredits} 학점
+                      <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#475569', minWidth: '60px', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                        {summary.completedCredits} / {summary.requiredCredits} {summary.areaType === 'DESIGN' ? '설계 학점' : '학점'}
                       </span>
                     </div>
                   </div>
