@@ -74,6 +74,45 @@ function ResultDashboard() {
               grid-template-columns: 1fr;
             }
           }
+
+          /* 툴팁 스타일 */
+          .tooltip-trigger {
+            position: relative;
+          }
+          .tooltip-bubble {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 1.5rem;
+            background-color: #1e293b;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            white-space: nowrap;
+            pointer-events: none;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-4px);
+            transition: all 0.2s ease-in-out;
+          }
+          .tooltip-bubble::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: 20px;
+            width: 10px;
+            height: 10px;
+            background-color: #1e293b;
+            transform: rotate(45deg);
+          }
+          .tooltip-trigger:hover .tooltip-bubble {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+          }
         `}
       </style>
 
@@ -177,15 +216,27 @@ function ResultDashboard() {
                 borderRadius: '16px',
                 boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
                 border: '1px solid #f1f5f9',
-                overflow: 'hidden',
                 display: 'flex',
                 flexDirection: 'column'
               }}>
-                <div style={{ padding: '1.25rem 1.5rem', backgroundColor: '#FFFBEB', borderBottom: '1px solid #FCD34D', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <AlertCircle size={24} color="#D97706" style={{ flexShrink: 0 }} />
-                  <h4 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: '#92400E' }}>
-                    검사에 포함되지 않은 항목
-                  </h4>
+                <div 
+                  className="tooltip-trigger"
+                  style={{ position: 'relative', padding: '1.25rem 1.5rem', backgroundColor: '#FFFBEB', borderBottom: '1px solid #FCD34D', borderTopLeftRadius: '16px', borderTopRightRadius: '16px', display: 'flex', alignItems: 'center', cursor: 'help' }}
+                >
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.1rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      <AlertCircle size={24} color="#D97706" style={{ flexShrink: 0 }} />
+                      <h4 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: '#92400E' }}>
+                        검사에 포함되지 않은 항목
+                      </h4>
+                    </div>
+                  </div>
+
+                  {/* 말풍선 툴팁 (CSS 기반) */}
+                  <div className="tooltip-bubble">
+                    현재 시스템에 존재하지 않는 과목입니다.
+                  </div>
+
                   <span style={{
                     marginLeft: 'auto',
                     padding: '4px 10px',
@@ -193,7 +244,8 @@ function ResultDashboard() {
                     fontSize: '0.85rem',
                     fontWeight: 700,
                     backgroundColor: '#FEF3C7',
-                    color: '#92400E'
+                    color: '#92400E',
+                    whiteSpace: 'nowrap'
                   }}>
                     {result.notCheckedResults.length}건
                   </span>
