@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2 } from 'lucide-react';
+import { Loader2, AlertTriangle } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 
 const Loading: React.FC = () => {
   const navigate = useNavigate();
   const { departmentName, entranceYear, file, setResult } = useAppContext();
   const [dots, setDots] = useState('');
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // 1초 단위로 '점(...)'이 늘어나는 애니메이션
   useEffect(() => {
@@ -49,6 +50,13 @@ const Loading: React.FC = () => {
           });
 
           if (!response.ok) {
+            // 백엔드의 커스텀 JSON 에러 추출 시도
+            const errorData = await response.json().catch(() => null);
+
+            // 규격화된 에러 응답이 존재하면 해당 객체를 그대로 throw
+            if (errorData && errorData.errorMessage) {
+              throw errorData;
+            }
             throw new Error(`서버 응답 오류: ${response.status}`);
           }
 
@@ -69,8 +77,21 @@ const Loading: React.FC = () => {
         if (error.name === 'AbortError') return;
 
         console.error('파일 업로드 및 분석 중 에러 발생:', error);
-        alert('파일 분석 중 오류가 발생했습니다. 백엔드 서버가 켜져 있는지 확인해주세요.');
-        navigate('/');
+
+        // 실무형 에러 분기 처리 (개발 vs 운영)
+        const isDev = import.meta.env.DEV;
+
+        // 백엔드 커스텀 에러 응답인 경우 (errorMessage 필드가 존재)
+        if (error.errorMessage) {
+          setErrorMsg(`[${error.errorCode || '오류'}]\n${error.errorMessage}`);
+        } else {
+          // 예측할 수 없는 시스템 에러 / 일반 통신 에러
+          const displayMessage = isDev
+            ? `[개발용 상세 에러]\n${error.message}\n백엔드 서버 상태를 확인해주세요.`
+            : '성적표 분석 중 일시적인 오류가 발생했습니다.\n잠시 후 다시 시도해주시거나 공학인증 센터에 문의해주세요.';
+
+          setErrorMsg(displayMessage);
+        }
       }
     };
 
@@ -78,6 +99,55 @@ const Loading: React.FC = () => {
 
     return () => abortController.abort();
   }, [file, departmentName, entranceYear, navigate, setResult]);
+
+  // 에러 전용 컴포넌트 렌더링
+  if (errorMsg) {
+    return (
+      <div style={{
+        height: '100%',
+        minHeight: '400px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '3rem',
+        textAlign: 'center'
+      }}>
+        <AlertTriangle size={48} color="#EF4444" style={{ marginBottom: '1.5rem' }} />
+        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1rem' }}>
+          오류가 발생했습니다
+        </h2>
+        <div style={{
+          backgroundColor: '#FEF2F2',
+          border: '1px solid #FECACA',
+          borderRadius: '12px',
+          padding: '1.5rem',
+          color: '#B91C1C',
+          maxWidth: '500px',
+          whiteSpace: 'pre-wrap',
+          lineHeight: 1.6,
+          marginBottom: '2rem',
+          textAlign: 'left'
+        }}>
+          {errorMsg}
+        </div>
+        <button
+          onClick={() => navigate('/')}
+          style={{
+            padding: '0.75rem 2rem',
+            backgroundColor: 'var(--color-primary)',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            fontWeight: 600,
+            cursor: 'pointer'
+          }}
+        >
+          처음으로 돌아가기
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div style={{
