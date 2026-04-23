@@ -1,17 +1,28 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Trophy, ArrowLeft, Download, AlertCircle, BookOpen, CheckCircle, XCircle } from 'lucide-react';
+import { Trophy, ArrowLeft, AlertCircle, BookOpen, CheckCircle, XCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 
 function ResultDashboard() {
   const navigate = useNavigate();
   const { result } = useAppContext();
 
+  // 아코디언 탭 컨트롤을 위한 상태 관리 (기본적으론 모두 닫힘 false)
+  const [expandedAreas, setExpandedAreas] = useState<Record<number, boolean>>({});
+
   useEffect(() => {
+    // 뷰포트 확장을 위해 전역 CSS 변수 설정
+    document.documentElement.style.setProperty('--layout-max-width', '1250px');
+
     if (!result) {
       alert('분석 결과가 없습니다. 처음부터 다시 시작해주세요.');
       navigate('/');
     }
+
+    return () => {
+      // 언마운트(타 페이지 이탈) 시 원래 크기로 복구
+      document.documentElement.style.removeProperty('--layout-max-width');
+    };
   }, [result, navigate]);
 
   if (!result) return null;
@@ -22,13 +33,20 @@ function ResultDashboard() {
 
   const getAreaLabel = (areaType: string) => {
     switch (areaType) {
-      case 'MSC': return 'MSC (기초/교양)';
-      case 'BSM': return 'BSM (수/과/전산)';
+      case 'MSC': return 'MSC';
+      case 'BSM': return 'BSM';
       case 'MAJOR': return '전공 영역';
       case 'GYOYANG': return '교양 영역';
       case 'DESIGN': return '설계 영역';
       default: return areaType;
     }
+  };
+
+  const toggleExpand = (idx: number) => {
+    setExpandedAreas(prev => ({
+      ...prev,
+      [idx]: !prev[idx]
+    }));
   };
 
   return (
@@ -39,6 +57,24 @@ function ResultDashboard() {
       height: '100%',
       backgroundColor: '#f8fafc',
     }}>
+      {/* 2x2 사이즈 구성을 위한 반응형 그리드 스타일 */}
+      <style>
+        {`
+          .dashboard-grid-2x2 {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(2, 1fr);
+          }
+          
+          /* 화면이 모바일/태블릿 수준으로 작아지면 1열로 떨어지도록 전환 */
+          @media (max-width: 900px) {
+            .dashboard-grid-2x2 {
+              grid-template-columns: 1fr;
+            }
+          }
+        `}
+      </style>
+
       {/* 결과 헤더 */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -47,14 +83,12 @@ function ResultDashboard() {
           </div>
           <div>
             <h2 style={{ fontSize: '1.75rem', fontWeight: 800, margin: 0, color: '#1e293b' }}>공학인증 분석 결과</h2>
-            <p style={{ margin: 0, color: '#64748b', fontSize: '1rem', marginTop: '4px' }}>
-              {result.studentName} ({result.studentId}) 님의 이수 현황입니다.
-            </p>
           </div>
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', flex: 1, overflowY: 'auto', paddingRight: '0.5rem', paddingBottom: '2rem' }}>
+      {/* 메인 뷰: 가로 전체를 채우는 열(Column) 기반 배치. 스크롤 허용 */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem', flex: 1, overflowY: 'auto', paddingRight: '0.5rem', paddingBottom: '2rem' }}>
 
         {/* 미충족 경고 영역 */}
         {result.nonPassResults && result.nonPassResults.length > 0 && (
@@ -79,8 +113,8 @@ function ResultDashboard() {
           </div>
         )}
 
-        {/* 상단 통계 영역 (진행률 & 영역별 통과 여부) */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(300px, 1fr) minmax(300px, 1fr)', gap: '1.5rem', flexWrap: 'wrap' }}>
+        {/* 상단 통계 영역 (전체 이수 현황 & 영역별 통과 여부 - 가로 배치) */}
+        <div className="dashboard-grid-2x2">
 
           {/* 전체 진행률 */}
           <div style={{
@@ -153,13 +187,14 @@ function ResultDashboard() {
 
         </div>
 
-        {/* 세부 수강 내역 (영역별 카드) */}
+        {/* 세부 수강 내역 (하단 영역, 2x2 사이즈 구성 및 아코디언) */}
         <div>
-          <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#1e293b', marginBottom: '1.5rem', marginTop: '1rem' }}>영역별 상세 이수 내역</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '1.5rem' }}>
+          <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#1e293b', marginBottom: '1.5rem' }}>영역별 상세 이수 내역</h3>
+          <div className="dashboard-grid-2x2">
             {result.creditSummaries.map((summary, idx) => {
               const summaryPercentage = Math.min(Math.round((summary.completedPoints / Math.max(summary.requiredPoints, 1)) * 100), 100);
               const isFulfilled = summary.completedPoints >= summary.requiredPoints;
+              const isExpanded = expandedAreas[idx] || false;
 
               return (
                 <div key={idx} style={{
@@ -171,8 +206,8 @@ function ResultDashboard() {
                   display: 'flex',
                   flexDirection: 'column'
                 }}>
-                  {/* 카드 헤더 */}
-                  <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #e2e8f0', backgroundColor: '#f8fafc' }}>
+                  {/* 카드 헤더 (진행 상태) */}
+                  <div style={{ padding: '1.25rem 1.5rem', backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                       <h4 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: '#334155' }}>
                         {getAreaLabel(summary.areaType)}
@@ -188,7 +223,7 @@ function ResultDashboard() {
                         {isFulfilled ? '충족' : `진행중 (-${Math.max(0, summary.requiredPoints - summary.completedPoints)})`}
                       </span>
                     </div>
-                    {/* 미니 진행률 */}
+                    {/* 미니 진행률 바 */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                       <div style={{ flex: 1, height: '8px', backgroundColor: '#e2e8f0', borderRadius: '999px', overflow: 'hidden' }}>
                         <div style={{
@@ -199,38 +234,69 @@ function ResultDashboard() {
                         }}></div>
                       </div>
                       <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#475569', minWidth: '60px', textAlign: 'right' }}>
-                        {summary.completedPoints} / {summary.requiredPoints}
+                        {summary.completedPoints} / {summary.requiredPoints} 학점
                       </span>
                     </div>
                   </div>
 
-                  {/* 수강 과목 리스트 */}
-                  <div style={{ padding: '1rem 1.5rem', flex: 1, backgroundColor: 'white' }}>
-                    {summary.relatedCourses && summary.relatedCourses.length > 0 ? (
-                      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-                        {summary.relatedCourses.map((course, cIdx) => (
-                          <li key={cIdx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.95rem' }}>
-                            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                              <span style={{ fontWeight: 600, color: '#334155' }}>{course.name}</span>
-                              <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{course.year}년도 {course.semester}학기 · {course.courseId}</span>
-                            </div>
-                            <span style={{ fontWeight: 700, color: '#3b82f6', backgroundColor: '#eff6ff', padding: '3px 8px', borderRadius: '6px', fontSize: '0.85rem' }}>
-                              {course.point}학점
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <div style={{ padding: '2rem 0', textAlign: 'center', color: '#94a3b8', fontSize: '0.95rem' }}>
-                        수강 내역이 없습니다.
-                      </div>
-                    )}
-                  </div>
+                  {/* 이수 과목 목록 보기 (아코디언 토글 버튼) */}
+                  <button
+                    onClick={() => toggleExpand(idx)}
+                    style={{
+                      border: 'none',
+                      backgroundColor: isExpanded ? '#f1f5f9' : 'white',
+                      padding: '0.75rem 1.5rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.5rem',
+                      cursor: 'pointer',
+                      fontWeight: 600,
+                      color: '#64748b',
+                      fontSize: '0.95rem',
+                      borderBottom: isExpanded ? '1px solid #e2e8f0' : 'none',
+                      transition: 'background-color 0.2s',
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f1f5f9'}
+                    onMouseOut={(e) => {
+                      if (!isExpanded) e.currentTarget.style.backgroundColor = 'white';
+                    }}
+                  >
+                    {isExpanded ? '과목 내역 닫기' : '이수 내역 확인하기'}
+                    {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                  </button>
+
+                  {/* 실제 이수 과목 리스트 (열림 상태일 때만 렌더링) */}
+                  {isExpanded && (
+                    <div style={{ padding: '1rem 1.5rem', backgroundColor: 'white' }}>
+                      {summary.relatedCourses && summary.relatedCourses.length > 0 ? (
+                        <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                          {summary.relatedCourses.map((course, cIdx) => (
+                            <li key={cIdx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.95rem' }}>
+                              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                <span style={{ fontWeight: 600, color: '#334155' }}>{course.name}</span>
+                                <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{course.year}년도 {course.semester}학기 · {course.courseId}</span>
+                              </div>
+                              <span style={{ fontWeight: 700, color: '#3b82f6', backgroundColor: '#eff6ff', padding: '3px 8px', borderRadius: '6px', fontSize: '0.85rem' }}>
+                                {course.point}학점
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <div style={{ padding: '1.5rem 0', textAlign: 'center', color: '#94a3b8', fontSize: '0.95rem' }}>
+                          수강 내역이 없습니다.
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                 </div>
               );
             })}
           </div>
         </div>
+
       </div>
 
       {/* 하단 홈으로 돌아가기 버튼 */}

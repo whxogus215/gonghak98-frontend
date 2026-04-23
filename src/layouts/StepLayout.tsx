@@ -19,14 +19,15 @@ const StepLayout: React.FC = () => {
       <div style={{
         backgroundColor: 'var(--bg-surface)',
         width: '100%',
-        maxWidth: '800px',
-        minHeight: '500px',
+        maxWidth: 'var(--layout-max-width, 900px)',
+        minHeight: '550px',
         borderRadius: '24px',
         boxShadow: 'var(--shadow-lg)',
         border: '1px solid var(--border-color)',
         overflow: 'hidden',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        transition: 'max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
       }}>
         {/* 상단 간이 헤더 (로고 및 진행 단계 표시용) */}
         <header style={{

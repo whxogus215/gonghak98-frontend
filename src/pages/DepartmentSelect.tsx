@@ -46,7 +46,7 @@ const DepartmentSelect: React.FC = () => {
       </h3>
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
         gap: '0.75rem',
         marginBottom: '2.5rem'
       }}>
@@ -84,7 +84,7 @@ const DepartmentSelect: React.FC = () => {
       </h3>
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
         gap: '0.75rem',
         marginBottom: '2rem'
       }}>
