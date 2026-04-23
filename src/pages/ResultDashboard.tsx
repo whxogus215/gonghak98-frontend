@@ -9,6 +9,8 @@ function ResultDashboard() {
 
   // 아코디언 탭 컨트롤을 위한 상태 관리 (기본적으론 모두 닫힘 false)
   const [expandedAreas, setExpandedAreas] = useState<Record<number, boolean>>({});
+  const [isNonPassExpanded, setIsNonPassExpanded] = useState(false);
+  const [isNotCheckedExpanded, setIsNotCheckedExpanded] = useState(false);
 
   useEffect(() => {
     // 뷰포트 확장을 위해 전역 CSS 변수 설정
@@ -27,8 +29,8 @@ function ResultDashboard() {
 
   if (!result) return null;
 
-  const totalCurrentCredit = result.creditSummaries.reduce((sum, item) => sum + item.completedPoints, 0);
-  const totalTargetCredit = result.creditSummaries.reduce((sum, item) => sum + item.requiredPoints, 0);
+  const totalCurrentCredit = result.creditSummaries.reduce((sum, item) => sum + item.completedCredits, 0);
+  const totalTargetCredit = result.creditSummaries.reduce((sum, item) => sum + item.requiredCredits, 0);
   const percentage = Math.min(Math.round((totalCurrentCredit / Math.max(totalTargetCredit, 1)) * 100), 100);
 
   const getAreaLabel = (areaType: string) => {
@@ -90,26 +92,155 @@ function ResultDashboard() {
       {/* 메인 뷰: 가로 전체를 채우는 열(Column) 기반 배치. 스크롤 허용 */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem', flex: 1, overflowY: 'auto', paddingRight: '0.5rem', paddingBottom: '2rem' }}>
 
-        {/* 미충족 경고 영역 */}
-        {result.nonPassResults && result.nonPassResults.length > 0 && (
-          <div style={{
-            backgroundColor: '#FEF2F2',
-            border: '1px solid #FCA5A5',
-            borderRadius: '12px',
-            padding: '1.25rem 1.5rem',
-            display: 'flex',
-            alignItems: 'flex-start',
-            gap: '1rem'
-          }}>
-            <AlertCircle size={24} color="#DC2626" style={{ flexShrink: 0, marginTop: '2px' }} />
-            <div>
-              <h3 style={{ margin: '0 0 0.5rem 0', color: '#991B1B', fontSize: '1.1rem', fontWeight: 700 }}>주의사항 및 미충족 항목</h3>
-              <ul style={{ margin: 0, paddingLeft: '1.5rem', color: '#B91C1C', fontSize: '0.95rem', lineHeight: 1.5 }}>
-                {result.nonPassResults.map((np, idx) => (
-                  <li key={idx}>과목코드 {np.courseId}: {np.reason === 'NOT_SATISFIED_PREREQUISITE' ? '선수과목 미이수' : np.reason}</li>
-                ))}
-              </ul>
-            </div>
+        {/* 경고 및 알림 영역 (가로 2열 배치) */}
+        {((result.nonPassResults && result.nonPassResults.length > 0) || (result.notCheckedResults && result.notCheckedResults.length > 0)) && (
+          <div className="dashboard-grid-2x2">
+            {/* 미충족 경고 영역 */}
+            {result.nonPassResults && result.nonPassResults.length > 0 && (
+              <div style={{
+                backgroundColor: 'white',
+                borderRadius: '16px',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                border: '1px solid #f1f5f9',
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column'
+              }}>
+                <div style={{ padding: '1.25rem 1.5rem', backgroundColor: '#FEF2F2', borderBottom: '1px solid #FCA5A5', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <AlertCircle size={24} color="#DC2626" style={{ flexShrink: 0 }} />
+                  <h4 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: '#991B1B' }}>
+                    공학인증 미충족 항목
+                  </h4>
+                  <span style={{
+                    marginLeft: 'auto',
+                    padding: '4px 10px',
+                    borderRadius: '20px',
+                    fontSize: '0.85rem',
+                    fontWeight: 700,
+                    backgroundColor: '#FEE2E2',
+                    color: '#991B1B'
+                  }}>
+                    {result.nonPassResults.length}건
+                  </span>
+                </div>
+
+                <button
+                  onClick={() => setIsNonPassExpanded(!isNonPassExpanded)}
+                  style={{
+                    border: 'none',
+                    backgroundColor: isNonPassExpanded ? '#f1f5f9' : 'white',
+                    padding: '0.75rem 1.5rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.5rem',
+                    cursor: 'pointer',
+                    fontWeight: 600,
+                    color: '#64748b',
+                    fontSize: '0.95rem',
+                    borderBottom: isNonPassExpanded ? '1px solid #e2e8f0' : 'none',
+                    transition: 'background-color 0.2s',
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f1f5f9'}
+                  onMouseOut={(e) => {
+                    if (!isNonPassExpanded) e.currentTarget.style.backgroundColor = 'white';
+                  }}
+                >
+                  {isNonPassExpanded ? '목록 닫기' : '항목 확인하기'}
+                  {isNonPassExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                </button>
+
+                {isNonPassExpanded && (
+                  <div style={{ padding: '1rem 1.5rem', backgroundColor: 'white' }}>
+                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                      {result.nonPassResults.map((np, idx) => (
+                        <li key={idx} style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                            <span style={{ fontWeight: 600, color: '#334155', fontSize: '0.95rem' }}>{np.courseName}</span>
+                            <span style={{ fontWeight: 700, color: '#DC2626', backgroundColor: '#FEF2F2', padding: '3px 8px', borderRadius: '6px', fontSize: '0.85rem', textAlign: 'right', wordBreak: 'keep-all' }}>
+                              {np.reason === 'NOT_SATISFIED_PREREQUISITE' ? '선수과목 미이수' : np.reason}
+                            </span>
+                          </div>
+                          <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{np.year}년도 {np.semester}학기 · {np.credit}학점 · 과목코드: {np.courseCode}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* 검사에 포함되지 않은 항목 영역 */}
+            {result.notCheckedResults && result.notCheckedResults.length > 0 && (
+              <div style={{
+                backgroundColor: 'white',
+                borderRadius: '16px',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                border: '1px solid #f1f5f9',
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column'
+              }}>
+                <div style={{ padding: '1.25rem 1.5rem', backgroundColor: '#FFFBEB', borderBottom: '1px solid #FCD34D', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <AlertCircle size={24} color="#D97706" style={{ flexShrink: 0 }} />
+                  <h4 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: '#92400E' }}>
+                    검사에 포함되지 않은 항목
+                  </h4>
+                  <span style={{
+                    marginLeft: 'auto',
+                    padding: '4px 10px',
+                    borderRadius: '20px',
+                    fontSize: '0.85rem',
+                    fontWeight: 700,
+                    backgroundColor: '#FEF3C7',
+                    color: '#92400E'
+                  }}>
+                    {result.notCheckedResults.length}건
+                  </span>
+                </div>
+
+                <button
+                  onClick={() => setIsNotCheckedExpanded(!isNotCheckedExpanded)}
+                  style={{
+                    border: 'none',
+                    backgroundColor: isNotCheckedExpanded ? '#f1f5f9' : 'white',
+                    padding: '0.75rem 1.5rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.5rem',
+                    cursor: 'pointer',
+                    fontWeight: 600,
+                    color: '#64748b',
+                    fontSize: '0.95rem',
+                    borderBottom: isNotCheckedExpanded ? '1px solid #e2e8f0' : 'none',
+                    transition: 'background-color 0.2s',
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f1f5f9'}
+                  onMouseOut={(e) => {
+                    if (!isNotCheckedExpanded) e.currentTarget.style.backgroundColor = 'white';
+                  }}
+                >
+                  {isNotCheckedExpanded ? '목록 닫기' : '항목 확인하기'}
+                  {isNotCheckedExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                </button>
+
+                {isNotCheckedExpanded && (
+                  <div style={{ padding: '1rem 1.5rem', backgroundColor: 'white' }}>
+                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                      {result.notCheckedResults.map((nc, idx) => (
+                        <li key={idx} style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ fontWeight: 600, color: '#334155', fontSize: '0.95rem' }}>{nc.courseName}</span>
+                          </div>
+                          <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{nc.year}년도 {nc.semester}학기 · {nc.credit}학점 · 과목코드: {nc.courseCode}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 
@@ -192,8 +323,8 @@ function ResultDashboard() {
           <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#1e293b', marginBottom: '1.5rem' }}>영역별 상세 이수 내역</h3>
           <div className="dashboard-grid-2x2">
             {result.creditSummaries.map((summary, idx) => {
-              const summaryPercentage = Math.min(Math.round((summary.completedPoints / Math.max(summary.requiredPoints, 1)) * 100), 100);
-              const isFulfilled = summary.completedPoints >= summary.requiredPoints;
+              const summaryPercentage = Math.min(Math.round((summary.completedCredits / Math.max(summary.requiredCredits, 1)) * 100), 100);
+              const isFulfilled = summary.completedCredits >= summary.requiredCredits;
               const isExpanded = expandedAreas[idx] || false;
 
               return (
@@ -220,7 +351,7 @@ function ResultDashboard() {
                         backgroundColor: isFulfilled ? '#DCFCE7' : '#FEF3C7',
                         color: isFulfilled ? '#166534' : '#92400E'
                       }}>
-                        {isFulfilled ? '충족' : `진행중 (-${Math.max(0, summary.requiredPoints - summary.completedPoints)})`}
+                        {isFulfilled ? '충족' : `진행중 (-${Math.max(0, summary.requiredCredits - summary.completedCredits)})`}
                       </span>
                     </div>
                     {/* 미니 진행률 바 */}
@@ -234,7 +365,7 @@ function ResultDashboard() {
                         }}></div>
                       </div>
                       <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#475569', minWidth: '60px', textAlign: 'right' }}>
-                        {summary.completedPoints} / {summary.requiredPoints} 학점
+                        {summary.completedCredits} / {summary.requiredCredits} 학점
                       </span>
                     </div>
                   </div>
@@ -274,11 +405,11 @@ function ResultDashboard() {
                           {summary.relatedCourses.map((course, cIdx) => (
                             <li key={cIdx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.95rem' }}>
                               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                <span style={{ fontWeight: 600, color: '#334155' }}>{course.name}</span>
-                                <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{course.year}년도 {course.semester}학기 · {course.courseId}</span>
+                                <span style={{ fontWeight: 600, color: '#334155' }}>{course.courseName}</span>
+                                <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{course.year}년도 {course.semester}학기 · {course.courseCode}</span>
                               </div>
                               <span style={{ fontWeight: 700, color: '#3b82f6', backgroundColor: '#eff6ff', padding: '3px 8px', borderRadius: '6px', fontSize: '0.85rem' }}>
-                                {course.point}학점
+                                {course.credit}학점
                               </span>
                             </li>
                           ))}

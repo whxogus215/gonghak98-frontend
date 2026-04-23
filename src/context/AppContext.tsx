@@ -3,17 +3,17 @@ import React, { createContext, useContext, useState, type ReactNode } from 'reac
 // 백엔드에서 넘겨줄 분석 결과의 데이터 형태(타입)를 정의합니다.
 // 타입스크립트의 장점: 이 형태를 벗어난 데이터가 들어오면 코드를 짤 때 즉시 에러가 납니다.
 export interface Course {
-  courseId: number;
-  name: string;
+  courseCode: string;
+  courseName: string;
   year: number;
   semester: number;
-  point: number;
+  credit: number;
 }
 
 export interface CreditSummary {
   areaType: string;
-  completedPoints: number;
-  requiredPoints: number;
+  completedCredits: number;
+  requiredCredits: number;
   relatedCourses: Course[];
 }
 
@@ -23,16 +23,29 @@ export interface PassResult {
 }
 
 export interface NonPassResult {
-  courseId: number;
+  courseCode: string;
+  courseName: string;
+  year: number;
+  semester: number;
+  credit: number;
   reason: string;
 }
 
+export interface NotCheckedResult {
+  courseCode: string;
+  courseName: string;
+  year: number;
+  semester: number;
+  credit: number;
+}
+
 export interface AnalysisResult {
-  id: string;
+  id: string | null;
   studentName?: string;
   studentId?: string;
   passResults: PassResult[];
   nonPassResults: NonPassResult[];
+  notCheckedResults: NotCheckedResult[];
   creditSummaries: CreditSummary[];
 }
 
