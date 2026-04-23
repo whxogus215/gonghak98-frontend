@@ -35,7 +35,7 @@ function ResultDashboard() {
 
   const getAreaLabel = (areaType: string) => {
     switch (areaType) {
-      case 'MSC': return 'MSC';
+      case '`MSC`': return 'MSC';
       case 'BSM': return 'BSM';
       case 'MAJOR': return '전공 영역';
       case 'GYOYANG': return '교양 영역';
@@ -219,7 +219,7 @@ function ResultDashboard() {
                 display: 'flex',
                 flexDirection: 'column'
               }}>
-                <div 
+                <div
                   className="tooltip-trigger"
                   style={{ position: 'relative', padding: '1.25rem 1.5rem', backgroundColor: '#FFFBEB', borderBottom: '1px solid #FCD34D', borderTopLeftRadius: '16px', borderTopRightRadius: '16px', display: 'flex', alignItems: 'center', cursor: 'help' }}
                 >

@@ -20,22 +20,19 @@ const App: React.FC = () => {
     <AppProvider>
       <BrowserRouter>
         <Routes>
-          {/* 모든 스텝 페이지는 공통된 StepLayout 블록 안에서 변경됩니다. */}
-          <Route path="/" element={<StepLayout />}>
+          {/* 풀스크린 마케팅 랜딩 페이지 */}
+          <Route path="/" element={<Landing />} />
 
-            {/* 최초 접속 화면 */}
-            <Route index element={<Landing />} />
-
-            {/* 단계별 플로우 */}
-            <Route path="department" element={<DepartmentSelect />} />
-            <Route path="upload" element={<Upload />} />
-            <Route path="loading" element={<Loading />} />
-            <Route path="result" element={<ResultDashboard />} />
-
-            {/* 잘못된 경로는 무조건 랜딩 페이지로 돌려보냅니다. */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-
+          {/* 나머지 스텝 페이지들은 공통된 StepLayout 블록 안에서 변경됩니다. */}
+          <Route element={<StepLayout />}>
+            <Route path="/department" element={<DepartmentSelect />} />
+            <Route path="/upload" element={<Upload />} />
+            <Route path="/loading" element={<Loading />} />
+            <Route path="/result" element={<ResultDashboard />} />
           </Route>
+
+          {/* 잘못된 경로는 무조건 랜딩 페이지로 돌려보냅니다. */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </AppProvider>
