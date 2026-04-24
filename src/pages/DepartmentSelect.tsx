@@ -9,11 +9,11 @@ const DepartmentSelect: React.FC = () => {
 
   // 사용자 입력을 위한 대표적인 학과 예시 목록입니다.
   const departments = [
-    '전자정보통신공학과'
+    { label: '전자정보통신공학과', sub: '(현 AI융합전자공학과)', value: '전자정보통신공학과' }
   ];
 
-  // 최근 학번 리스트 (2024 ~ 2025)
-  const entranceYears = Array.from({ length: 2 }, (_, i) => String(2025 - i));
+  // 최근 학번 리스트 (2020 ~ 2025)
+  const entranceYears = Array.from({ length: 6 }, (_, i) => String(2020 + i));
 
   const handleNext = () => {
     if (departmentName && entranceYear) {
@@ -56,17 +56,18 @@ const DepartmentSelect: React.FC = () => {
         marginBottom: '2.5rem'
       }}>
         {departments.map((dept) => {
-          const isSelected = departmentName === dept;
+          const isSelected = departmentName === dept.value;
           return (
             <div
-              key={dept}
-              onClick={() => setDepartmentName(dept)}
+              key={dept.value}
+              onClick={() => setDepartmentName(dept.value)}
               style={{
                 border: `2px solid ${isSelected ? 'var(--color-primary)' : 'var(--border-color)'}`,
                 backgroundColor: isSelected ? '#FEF2F2' : 'white',
                 borderRadius: '12px',
                 padding: '1rem 0.5rem',
                 display: 'flex',
+                flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
@@ -74,9 +75,11 @@ const DepartmentSelect: React.FC = () => {
                 fontWeight: isSelected ? 700 : 500,
                 color: isSelected ? 'var(--color-primary)' : 'var(--text-primary)',
                 boxShadow: isSelected ? '0 4px 6px -1px rgba(195, 15, 35, 0.1)' : 'none',
+                gap: '0.25rem',
               }}
             >
-              {dept}
+              <span>{dept.label}</span>
+              <span style={{ fontSize: '0.8rem', fontWeight: 400, opacity: 0.7 }}>{dept.sub}</span>
             </div>
           );
         })}
