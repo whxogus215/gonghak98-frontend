@@ -88,7 +88,7 @@ const Loading: React.FC = () => {
           // 예측할 수 없는 시스템 에러 / 일반 통신 에러
           const displayMessage = isDev
             ? `[개발용 상세 에러]\n${error.message}\n백엔드 서버 상태를 확인해주세요.`
-            : '성적표 분석 중 일시적인 오류가 발생했습니다.\n잠시 후 다시 시도해주시거나 공학인증 센터에 문의해주세요.';
+            : '성적표 분석 중 일시적인 오류가 발생했습니다.\n다시 시도해주세요.';
 
           setErrorMsg(displayMessage);
         }
