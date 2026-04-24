@@ -7,7 +7,6 @@ import {
   Shield,
   CheckCircle2,
   FileSpreadsheet,
-  Zap,
   HelpCircle,
   ChevronDown,
   ChevronUp,
@@ -382,7 +381,7 @@ const About: React.FC = () => {
                   fontWeight: 500,
                 }}
               >
-                ▲ 실제 ABEEK 교과과정 이수체계도 — 이것을 수기로 대조해야 합니다.
+                ▲ 전자정보통신공학과 18학년도 ABEEK 교과과정 이수체계도
               </div>
             </div>
 
