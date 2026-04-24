@@ -53,6 +53,12 @@ const Landing: React.FC = () => {
           .landing-cta-desc { font-size: 1rem; }
           .landing-cta-btn { padding: 1rem 2rem; font-size: 1rem; }
         }
+        @media (max-width: 480px) {
+          .landing-nav-logo { font-size: 1rem !important; }
+          .landing-nav-text-btn { display: none !important; }
+          .landing-nav-kakao { margin-right: 0.5rem !important; }
+          .landing-nav-cta { padding: 0.5rem 1rem !important; font-size: 0.85rem !important; }
+        }
       `}</style>
       {/* 네비게이션 바 */}
       <nav className="landing-nav" style={{
@@ -66,11 +72,12 @@ const Landing: React.FC = () => {
         borderBottom: '1px solid rgba(0,0,0,0.05)',
         zIndex: 1000
       }}>
-        <div style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--color-primary)' }}>
+        <div className="landing-nav-logo" style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--color-primary)', whiteSpace: 'nowrap' }}>
           세종대 공학인증 패스
         </div>
         <div style={{ flex: 1 }} />
         <a
+          className="landing-nav-kakao"
           href="https://open.kakao.com/o/se7DqQri"
           target="_blank"
           rel="noopener noreferrer"
@@ -105,6 +112,7 @@ const Landing: React.FC = () => {
           서비스 소개
         </button>
         <button
+          className="landing-nav-cta"
           onClick={() => navigate('/department')}
           style={{
             backgroundColor: 'var(--color-primary)',
@@ -115,6 +123,7 @@ const Landing: React.FC = () => {
             fontWeight: 600,
             cursor: 'pointer',
             transition: 'background-color 0.2s',
+            whiteSpace: 'nowrap',
           }}
           onMouseOver={e => e.currentTarget.style.backgroundColor = '#a30c1d'}
           onMouseOut={e => e.currentTarget.style.backgroundColor = 'var(--color-primary)'}

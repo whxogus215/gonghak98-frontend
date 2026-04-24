@@ -229,6 +229,12 @@ const About: React.FC = () => {
           .about-cta-btn { padding: 1rem 2rem; font-size: 1rem; }
           .about-faq-inner { padding: 0.5rem 1rem; }
         }
+        @media (max-width: 480px) {
+          .about-nav-logo { font-size: 1rem !important; }
+          .about-nav-home-btn { display: none !important; }
+          .about-nav-kakao { margin-right: 0.5rem !important; }
+          .about-nav-cta { padding: 0.5rem 1rem !important; font-size: 0.85rem !important; }
+        }
       `}</style>
       {/* ─── 네비게이션 바 ─── */}
       <nav
@@ -248,13 +254,15 @@ const About: React.FC = () => {
         }}
       >
         <div
-          style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--color-primary)', cursor: 'pointer' }}
+          className="about-nav-logo"
+          style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--color-primary)', cursor: 'pointer', whiteSpace: 'nowrap' }}
           onClick={() => navigate('/')}
         >
           세종대 공학인증 패스
         </div>
         <div style={{ flex: 1 }} />
         <a
+          className="about-nav-kakao"
           href="https://open.kakao.com/o/se7DqQri"
           target="_blank"
           rel="noopener noreferrer"
@@ -273,6 +281,7 @@ const About: React.FC = () => {
           <KakaoIcon size={26} />
         </a>
         <button
+          className="about-nav-home-btn"
           onClick={() => navigate('/')}
           style={{
             background: 'none',
@@ -294,6 +303,7 @@ const About: React.FC = () => {
           홈으로
         </button>
         <button
+          className="about-nav-cta"
           onClick={() => navigate('/department')}
           style={{
             backgroundColor: 'var(--color-primary)',
@@ -304,6 +314,7 @@ const About: React.FC = () => {
             fontWeight: 600,
             cursor: 'pointer',
             transition: 'background-color 0.2s',
+            whiteSpace: 'nowrap',
           }}
           onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#a30c1d')}
           onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'var(--color-primary)')}
