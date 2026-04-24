@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Shield, Zap, BarChart3, CheckCircle2, Trophy, BookOpen, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import { ArrowRight, Shield, BarChart3, CheckCircle2, Trophy, BookOpen, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import KakaoIcon from '../components/KakaoIcon';
 
 const Landing: React.FC = () => {
@@ -136,34 +136,65 @@ const Landing: React.FC = () => {
           요건을 분석해 드립니다.
         </p>
 
-        <button
-          onClick={() => navigate('/department')}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            backgroundColor: 'var(--color-primary)',
-            color: 'white',
-            border: 'none',
-            padding: '1.25rem 3rem',
-            fontSize: '1.25rem',
-            fontWeight: 700,
-            borderRadius: '50px',
-            cursor: 'pointer',
-            boxShadow: '0 10px 25px -5px rgba(195, 15, 35, 0.4)',
-            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-          }}
-          onMouseOver={(e) => {
-            e.currentTarget.style.transform = 'translateY(-4px)';
-            e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(195, 15, 35, 0.5)';
-          }}
-          onMouseOut={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 10px 25px -5px rgba(195, 15, 35, 0.4)';
-          }}
-        >
-          지금 바로 시작하기 <ArrowRight size={24} />
-        </button>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <button
+            onClick={() => navigate('/about')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              backgroundColor: 'transparent',
+              color: '#4B5563',
+              border: '2px solid #D1D5DB',
+              padding: '1.15rem 2.5rem',
+              fontSize: '1.25rem',
+              fontWeight: 700,
+              borderRadius: '50px',
+              cursor: 'pointer',
+              transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = 'translateY(-4px)';
+              e.currentTarget.style.borderColor = 'var(--color-primary)';
+              e.currentTarget.style.color = 'var(--color-primary)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.borderColor = '#D1D5DB';
+              e.currentTarget.style.color = '#4B5563';
+            }}
+          >
+            서비스 소개
+          </button>
+          <button
+            onClick={() => navigate('/department')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              backgroundColor: 'var(--color-primary)',
+              color: 'white',
+              border: 'none',
+              padding: '1.25rem 3rem',
+              fontSize: '1.25rem',
+              fontWeight: 700,
+              borderRadius: '50px',
+              cursor: 'pointer',
+              boxShadow: '0 10px 25px -5px rgba(195, 15, 35, 0.4)',
+              transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = 'translateY(-4px)';
+              e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(195, 15, 35, 0.5)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 10px 25px -5px rgba(195, 15, 35, 0.4)';
+            }}
+          >
+            지금 바로 시작하기 <ArrowRight size={24} />
+          </button>
+        </div>
 
         {/* 대시보드 미리보기 이미지 (CSS 박스로 목업 표현) */}
         <div style={{
