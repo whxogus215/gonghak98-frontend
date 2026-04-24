@@ -209,17 +209,17 @@ const Landing: React.FC = () => {
                     <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: '#334155' }}>전체 이수 현황</h3>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <span style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--color-primary)' }}>122</span>
-                    <span style={{ color: '#64748b', fontWeight: 600, fontSize: '1.1rem' }}> / 130 학점</span>
+                    <span style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--color-primary)' }}>71</span>
+                    <span style={{ color: '#64748b', fontWeight: 600, fontSize: '1.1rem' }}> / 86 학점</span>
                   </div>
                 </div>
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', fontSize: '1rem', fontWeight: 700 }}>
                     <span style={{ color: '#475569' }}>진행률</span>
-                    <span style={{ color: 'var(--color-primary)' }}>94%</span>
+                    <span style={{ color: 'var(--color-primary)' }}>82%</span>
                   </div>
                   <div style={{ width: '100%', height: '14px', backgroundColor: '#e2e8f0', borderRadius: '999px', overflow: 'hidden' }}>
-                    <div style={{ width: '94%', height: '100%', background: 'linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%)', borderRadius: '999px' }} />
+                    <div style={{ width: '82%', height: '100%', background: 'linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%)', borderRadius: '999px' }} />
                   </div>
                 </div>
               </div>
