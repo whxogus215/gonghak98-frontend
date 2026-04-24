@@ -22,13 +22,18 @@ const DepartmentSelect: React.FC = () => {
   };
 
   return (
-    <div style={{
-      padding: '2rem 3rem',
+    <div className="dept-container" style={{
       display: 'flex',
       flexDirection: 'column',
       height: '100%',
       overflowY: 'auto'
     }}>
+      <style>{`
+        .dept-container { padding: 2rem 3rem; }
+        @media (max-width: 768px) {
+          .dept-container { padding: 1.25rem 1rem; }
+        }
+      `}</style>
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
         <School size={28} color="var(--color-primary)" />
         <h2 style={{ fontSize: '1.5rem', fontWeight: 700, margin: 0 }}>기본 정보 입력</h2>

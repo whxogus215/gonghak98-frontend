@@ -190,8 +190,49 @@ const About: React.FC = () => {
         overflowX: 'hidden',
       }}
     >
+      <style>{`
+        .about-nav { padding: 0 2rem; }
+        .about-hero { padding: 160px 2rem 80px; }
+        .about-hero-title { font-size: 3.5rem; letter-spacing: -2px; }
+        .about-hero-desc { font-size: 1.2rem; }
+        .about-story-section { padding: 0 2rem 6rem; }
+        .about-story-flex { gap: 3rem; }
+        .about-story-img { max-width: 440px; }
+        .about-story-text-title { font-size: 1.75rem; }
+        .about-solution-card { padding: 3rem 3.5rem; gap: 2.5rem; }
+        .about-solution-chart { width: 280px; }
+        .about-section { padding: 6rem 2rem; }
+        .about-section-title { font-size: 2.5rem; }
+        .about-section-desc { font-size: 1.15rem; }
+        .about-cta-section { padding: 6rem 2rem; }
+        .about-cta-title { font-size: 2.5rem; }
+        .about-cta-desc { font-size: 1.2rem; }
+        .about-cta-btn { padding: 1.2rem 3rem; font-size: 1.25rem; }
+        .about-faq-inner { padding: 0.5rem 2rem; }
+        @media (max-width: 768px) {
+          .about-nav { padding: 0 1rem; }
+          .about-hero { padding: 120px 1rem 50px; }
+          .about-hero-title { font-size: 2rem; letter-spacing: -1px; }
+          .about-hero-desc { font-size: 1rem; }
+          .about-story-section { padding: 0 1rem 3rem; }
+          .about-story-flex { gap: 1.5rem; }
+          .about-story-img { max-width: 100%; }
+          .about-story-text-title { font-size: 1.35rem; }
+          .about-solution-card { padding: 1.5rem 1.25rem; gap: 1.5rem; }
+          .about-solution-chart { width: 100%; }
+          .about-section { padding: 3rem 1rem; }
+          .about-section-title { font-size: 1.5rem; }
+          .about-section-desc { font-size: 1rem; }
+          .about-cta-section { padding: 3rem 1rem; }
+          .about-cta-title { font-size: 1.5rem; }
+          .about-cta-desc { font-size: 1rem; }
+          .about-cta-btn { padding: 1rem 2rem; font-size: 1rem; }
+          .about-faq-inner { padding: 0.5rem 1rem; }
+        }
+      `}</style>
       {/* ─── 네비게이션 바 ─── */}
       <nav
+        className="about-nav"
         style={{
           position: 'fixed',
           top: 0,
@@ -200,7 +241,6 @@ const About: React.FC = () => {
           height: '70px',
           display: 'flex',
           alignItems: 'center',
-          padding: '0 2rem',
           backgroundColor: 'rgba(255, 255, 255, 0.8)',
           backdropFilter: 'blur(12px)',
           borderBottom: '1px solid rgba(0,0,0,0.05)',
@@ -274,8 +314,8 @@ const About: React.FC = () => {
 
       {/* ─── 히어로 섹션: 개인 일화 인트로 ─── */}
       <section
+        className="about-hero"
         style={{
-          padding: '160px 2rem 80px',
           textAlign: 'center',
           background: 'linear-gradient(180deg, rgba(195,15,35,0.05) 0%, rgba(255,255,255,0) 100%)',
         }}
@@ -298,11 +338,10 @@ const About: React.FC = () => {
         </div>
 
         <h1
+          className="about-hero-title"
           style={{
-            fontSize: '3.5rem',
             fontWeight: 800,
             color: '#111827',
-            letterSpacing: '-2px',
             lineHeight: 1.15,
             marginBottom: '1.5rem',
             wordBreak: 'keep-all',
@@ -312,8 +351,8 @@ const About: React.FC = () => {
         </h1>
 
         <p
+          className="about-hero-desc"
           style={{
-            fontSize: '1.2rem',
             color: '#4B5563',
             maxWidth: '700px',
             margin: '0 auto 4rem',
@@ -328,15 +367,15 @@ const About: React.FC = () => {
       </section>
 
       {/* ─── 개인 일화 스토리 섹션 ─── */}
-      <section style={{ padding: '0 2rem 6rem', backgroundColor: '#ffffff' }}>
+      <section className="about-story-section" style={{ backgroundColor: '#ffffff' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
 
           {/* 이수체계도 이미지 + 설명 */}
           <div
+            className="about-story-flex"
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '3rem',
               marginBottom: '4rem',
               flexWrap: 'wrap',
               justifyContent: 'center',
@@ -344,10 +383,10 @@ const About: React.FC = () => {
           >
             {/* 이미지 목업 */}
             <div
+              className="about-story-img"
               style={{
                 position: 'relative',
                 flex: '0 0 auto',
-                maxWidth: '440px',
                 width: '100%',
               }}
             >
@@ -402,8 +441,8 @@ const About: React.FC = () => {
                 😵 개발자의 실제 경험
               </div>
               <h2
+                className="about-story-text-title"
                 style={{
-                  fontSize: '1.75rem',
                   fontWeight: 800,
                   color: '#1e293b',
                   lineHeight: 1.35,
@@ -457,14 +496,13 @@ const About: React.FC = () => {
 
           {/* 해결책 소개 카드 */}
           <div
+            className="about-solution-card"
             style={{
               background: 'linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%)',
               borderRadius: '24px',
-              padding: '3rem 3.5rem',
               color: '#1e293b',
               display: 'flex',
               alignItems: 'center',
-              gap: '2.5rem',
               flexWrap: 'wrap',
               justifyContent: 'center',
               boxShadow: '0 20px 40px rgba(59,130,246,0.08)',
@@ -473,9 +511,9 @@ const About: React.FC = () => {
           >
             {/* 학과별 이용자 수 차트 */}
             <div
+              className="about-solution-chart"
               style={{
                 flex: '0 0 auto',
-                width: '280px',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '0.75rem',
@@ -563,12 +601,12 @@ const About: React.FC = () => {
       </section>
 
       {/* ─── 사용 방법 (How-to) ─── */}
-      <section style={{ padding: '6rem 2rem', backgroundColor: '#FAFAFA' }}>
+      <section className="about-section" style={{ backgroundColor: '#FAFAFA' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '4.5rem' }}>
             <h2
+              className="about-section-title"
               style={{
-                fontSize: '2.5rem',
                 fontWeight: 800,
                 color: '#111827',
                 marginBottom: '1rem',
@@ -610,12 +648,12 @@ const About: React.FC = () => {
       </section>
 
       {/* ─── 핵심 기능 소개 ─── */}
-      <section style={{ padding: '6rem 2rem' }}>
+      <section className="about-section" style={{ backgroundColor: 'white' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '4.5rem' }}>
             <h2
+              className="about-section-title"
               style={{
-                fontSize: '2.5rem',
                 fontWeight: 800,
                 color: '#111827',
                 marginBottom: '1rem',
@@ -624,7 +662,7 @@ const About: React.FC = () => {
             >
               핵심 기능
             </h2>
-            <p style={{ fontSize: '1.15rem', color: '#6B7280', wordBreak: 'keep-all' }}>
+            <p className="about-section-desc" style={{ color: '#6B7280', wordBreak: 'keep-all' }}>
               공학인증 검증에 필요한 모든 것을 하나의 서비스에 담았습니다.
             </p>
           </div>
@@ -718,12 +756,12 @@ const About: React.FC = () => {
       </section>
 
       {/* ─── FAQ 섹션 ─── */}
-      <section style={{ padding: '6rem 2rem', backgroundColor: '#FAFAFA' }}>
+      <section className="about-section" style={{ backgroundColor: '#FAFAFA' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
             <h2
+              className="about-section-title"
               style={{
-                fontSize: '2.5rem',
                 fontWeight: 800,
                 color: '#111827',
                 marginBottom: '1rem',
@@ -732,16 +770,16 @@ const About: React.FC = () => {
             >
               자주 묻는 질문
             </h2>
-            <p style={{ fontSize: '1.15rem', color: '#6B7280' }}>
+            <p className="about-section-desc" style={{ color: '#6B7280' }}>
               궁금한 점이 있으신가요?
             </p>
           </div>
 
           <div
+            className="about-faq-inner"
             style={{
               backgroundColor: 'white',
               borderRadius: '20px',
-              padding: '0.5rem 2rem',
               border: '1px solid #E5E7EB',
               boxShadow: '0 4px 12px rgba(0,0,0,0.04)',
             }}
@@ -761,27 +799,26 @@ const About: React.FC = () => {
 
       {/* ─── 하단 CTA ─── */}
       <section
+        className="about-cta-section"
         style={{
-          padding: '6rem 2rem',
           backgroundColor: 'var(--color-primary)',
           color: 'white',
           textAlign: 'center',
         }}
       >
-        <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '1.5rem' }}>
+        <h2 className="about-cta-title" style={{ fontWeight: 800, marginBottom: '1.5rem' }}>
           지금 바로 확인해보세요
         </h2>
-        <p style={{ fontSize: '1.2rem', marginBottom: '3rem', opacity: 0.9 }}>
+        <p className="about-cta-desc" style={{ marginBottom: '3rem', opacity: 0.9 }}>
           복잡한 과정 없이, 1분이면 충분합니다.
         </p>
         <button
+          className="about-cta-btn"
           onClick={() => navigate('/department')}
           style={{
             backgroundColor: 'white',
             color: 'var(--color-primary)',
             border: 'none',
-            padding: '1.2rem 3rem',
-            fontSize: '1.25rem',
             fontWeight: 800,
             borderRadius: '50px',
             cursor: 'pointer',

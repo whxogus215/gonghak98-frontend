@@ -80,3 +80,10 @@ ul, ol {
 ::-webkit-scrollbar-thumb:hover {
   background: #94A3B8;
 }
+
+/* ─── 모바일 반응형 ─── */
+@media (max-width: 768px) {
+  html {
+    font-size: 100%; /* 18px → 16px 로 복원 */
+  }
+}

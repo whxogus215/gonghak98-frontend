@@ -103,16 +103,21 @@ const Loading: React.FC = () => {
   // 에러 전용 컴포넌트 렌더링
   if (errorMsg) {
     return (
-      <div style={{
+      <div className="loading-container" style={{
         height: '100%',
         minHeight: '400px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '3rem',
         textAlign: 'center'
       }}>
+        <style>{`
+          .loading-container { padding: 3rem; }
+          @media (max-width: 768px) {
+            .loading-container { padding: 1.5rem 1rem; }
+          }
+        `}</style>
         <AlertTriangle size={48} color="#EF4444" style={{ marginBottom: '1.5rem' }} />
         <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1rem' }}>
           오류가 발생했습니다
@@ -150,16 +155,21 @@ const Loading: React.FC = () => {
   }
 
   return (
-    <div style={{
+    <div className="loading-container" style={{
       height: '100%',
       minHeight: '400px',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '3rem',
       textAlign: 'center'
     }}>
+      <style>{`
+        .loading-container { padding: 3rem; }
+        @media (max-width: 768px) {
+          .loading-container { padding: 1.5rem 1rem; }
+        }
+      `}</style>
       <style>
         {`
           @keyframes spin {

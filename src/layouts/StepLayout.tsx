@@ -3,25 +3,30 @@ import { Outlet } from 'react-router-dom';
 
 const StepLayout: React.FC = () => {
   return (
-    <div style={{
+    <div className="step-layout-wrapper" style={{
       minHeight: '100vh',
       backgroundColor: 'var(--bg-main)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '2rem 1rem'
     }}>
+      <style>{`
+        .step-layout-wrapper { padding: 2rem 1rem; }
+        .step-layout-card { border-radius: 24px; min-height: 550px; }
+        @media (max-width: 768px) {
+          .step-layout-wrapper { padding: 1rem 0.5rem; }
+          .step-layout-card { border-radius: 16px; min-height: auto; }
+        }
+      `}</style>
       {/* 
         중앙 집중형 카드 UI
         - 비회원이 한 단계씩 집중해서 넘어갈 수 있도록 
           불필요한 메뉴를 없애고 중앙에 띄우는 레이아웃입니다.
       */}
-      <div style={{
+      <div className="step-layout-card" style={{
         backgroundColor: 'var(--bg-surface)',
         width: '100%',
         maxWidth: 'var(--layout-max-width, 900px)',
-        minHeight: '550px',
-        borderRadius: '24px',
         boxShadow: 'var(--shadow-lg)',
         border: '1px solid var(--border-color)',
         overflow: 'hidden',

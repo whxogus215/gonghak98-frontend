@@ -52,8 +52,7 @@ function ResultDashboard() {
   };
 
   return (
-    <div style={{
-      padding: '2rem 3rem',
+    <div className="result-container" style={{
       display: 'flex',
       flexDirection: 'column',
       height: '100%',
@@ -62,6 +61,7 @@ function ResultDashboard() {
       {/* 2x2 사이즈 구성을 위한 반응형 그리드 스타일 */}
       <style>
         {`
+          .result-container { padding: 2rem 3rem; }
           .dashboard-grid-2x2 {
             display: grid;
             gap: 1.5rem;
@@ -73,6 +73,9 @@ function ResultDashboard() {
             .dashboard-grid-2x2 {
               grid-template-columns: 1fr;
             }
+          }
+          @media (max-width: 768px) {
+            .result-container { padding: 1.25rem 1rem; }
           }
 
           /* 툴팁 스타일 */

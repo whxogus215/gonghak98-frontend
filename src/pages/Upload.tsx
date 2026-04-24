@@ -65,12 +65,17 @@ const Upload: React.FC = () => {
 
 
   return (
-    <div style={{
-      padding: '2rem 3rem',
+    <div className="upload-container" style={{
       display: 'flex',
       flexDirection: 'column',
       height: '100%'
     }}>
+      <style>{`
+        .upload-container { padding: 2rem 3rem; }
+        @media (max-width: 768px) {
+          .upload-container { padding: 1.25rem 1rem; }
+        }
+      `}</style>
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
         <FileText size={28} color="var(--color-primary)" />
         <h2 style={{ fontSize: '1.5rem', fontWeight: 700, margin: 0 }}>기이수 성적표 업로드</h2>

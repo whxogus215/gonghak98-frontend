@@ -14,14 +14,53 @@ const Landing: React.FC = () => {
       fontFamily: 'Inter, "Pretendard", sans-serif',
       overflowX: 'hidden'
     }}>
+      <style>{`
+        .landing-nav { padding: 0 2rem; }
+        .landing-nav-text-btn { margin-right: 1.5rem; font-size: 0.95rem; }
+        .landing-hero { padding: 160px 2rem 120px; }
+        .landing-hero-title { font-size: 4.5rem; letter-spacing: -2px; }
+        .landing-hero-desc { font-size: 1.25rem; }
+        .landing-hero-btn { padding: 1.25rem 3rem; font-size: 1.25rem; }
+        .landing-hero-btn-secondary { padding: 1.15rem 2.5rem; font-size: 1.25rem; }
+        .landing-mockup { margin-top: 6rem; min-height: 520px; }
+        .landing-mockup-content { padding: 2rem 3rem; grid-template-columns: 1.1fr 0.9fr; }
+        .landing-mockup-title { font-size: 1.75rem; }
+        .landing-section { padding: 8rem 2rem; }
+        .landing-section-title { font-size: 2.5rem; }
+        .landing-section-desc { font-size: 1.25rem; }
+        .landing-feature-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+        .landing-cta-section { padding: 6rem 2rem; }
+        .landing-cta-title { font-size: 2.5rem; }
+        .landing-cta-desc { font-size: 1.2rem; }
+        .landing-cta-btn { padding: 1.2rem 3rem; font-size: 1.25rem; }
+        @media (max-width: 768px) {
+          .landing-nav { padding: 0 1rem; }
+          .landing-nav-text-btn { margin-right: 0.5rem; font-size: 0.85rem; }
+          .landing-hero { padding: 120px 1rem 60px; }
+          .landing-hero-title { font-size: 2rem; letter-spacing: -1px; }
+          .landing-hero-desc { font-size: 1rem; }
+          .landing-hero-btn { padding: 1rem 1.75rem; font-size: 1rem; }
+          .landing-hero-btn-secondary { padding: 0.9rem 1.5rem; font-size: 1rem; }
+          .landing-mockup { margin-top: 3rem; min-height: auto; }
+          .landing-mockup-content { padding: 1rem; grid-template-columns: 1fr; }
+          .landing-mockup-title { font-size: 1.25rem; }
+          .landing-section { padding: 4rem 1rem; }
+          .landing-section-title { font-size: 1.5rem; }
+          .landing-section-desc { font-size: 1rem; }
+          .landing-feature-grid { grid-template-columns: 1fr; }
+          .landing-cta-section { padding: 3rem 1rem; }
+          .landing-cta-title { font-size: 1.5rem; }
+          .landing-cta-desc { font-size: 1rem; }
+          .landing-cta-btn { padding: 1rem 2rem; font-size: 1rem; }
+        }
+      `}</style>
       {/* 네비게이션 바 */}
-      <nav style={{
+      <nav className="landing-nav" style={{
         position: 'fixed',
         top: 0, left: 0, right: 0,
         height: '70px',
         display: 'flex',
         alignItems: 'center',
-        padding: '0 2rem',
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
         backdropFilter: 'blur(12px)',
         borderBottom: '1px solid rgba(0,0,0,0.05)',
@@ -50,15 +89,14 @@ const Landing: React.FC = () => {
           <KakaoIcon size={26} />
         </a>
         <button
+          className="landing-nav-text-btn"
           onClick={() => navigate('/about')}
           style={{
             background: 'none',
             border: 'none',
             color: '#4B5563',
             fontWeight: 600,
-            fontSize: '0.95rem',
             cursor: 'pointer',
-            marginRight: '1.5rem',
             transition: 'color 0.2s',
           }}
           onMouseOver={e => e.currentTarget.style.color = 'var(--color-primary)'}
@@ -86,8 +124,7 @@ const Landing: React.FC = () => {
       </nav>
 
       {/* 히어로 섹션 */}
-      <section style={{
-        padding: '160px 2rem 120px',
+      <section className="landing-hero" style={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -110,11 +147,9 @@ const Landing: React.FC = () => {
           <img src="/favicon.svg" alt="logo" style={{ width: 18, height: 18 }} /> 복잡한 공학인증을 한 번에
         </div>
 
-        <h1 style={{
-          fontSize: '4.5rem',
+        <h1 className="landing-hero-title" style={{
           fontWeight: 800,
           color: '#111827',
-          letterSpacing: '-2px',
           lineHeight: 1.1,
           marginBottom: '1.5rem',
           wordBreak: 'keep-all'
@@ -123,8 +158,7 @@ const Landing: React.FC = () => {
           단 1분 만에 확인하세요
         </h1>
 
-        <p style={{
-          fontSize: '1.25rem',
+        <p className="landing-hero-desc" style={{
           color: '#4B5563',
           maxWidth: '600px',
           lineHeight: 1.6,
@@ -138,6 +172,7 @@ const Landing: React.FC = () => {
 
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
           <button
+            className="landing-hero-btn-secondary"
             onClick={() => navigate('/about')}
             style={{
               display: 'flex',
@@ -146,8 +181,6 @@ const Landing: React.FC = () => {
               backgroundColor: 'transparent',
               color: '#4B5563',
               border: '2px solid #D1D5DB',
-              padding: '1.15rem 2.5rem',
-              fontSize: '1.25rem',
               fontWeight: 700,
               borderRadius: '50px',
               cursor: 'pointer',
@@ -167,6 +200,7 @@ const Landing: React.FC = () => {
             서비스 소개
           </button>
           <button
+            className="landing-hero-btn"
             onClick={() => navigate('/department')}
             style={{
               display: 'flex',
@@ -175,8 +209,6 @@ const Landing: React.FC = () => {
               backgroundColor: 'var(--color-primary)',
               color: 'white',
               border: 'none',
-              padding: '1.25rem 3rem',
-              fontSize: '1.25rem',
               fontWeight: 700,
               borderRadius: '50px',
               cursor: 'pointer',
@@ -197,12 +229,10 @@ const Landing: React.FC = () => {
         </div>
 
         {/* 대시보드 미리보기 이미지 (CSS 박스로 목업 표현) */}
-        <div style={{
-          marginTop: '6rem',
+        <div className="landing-mockup" style={{
           width: '100%',
           maxWidth: '1000px',
           height: 'auto',
-          minHeight: '520px',
           paddingBottom: '3rem',
           backgroundColor: '#f8fafc',
           borderRadius: '24px',
@@ -221,7 +251,7 @@ const Landing: React.FC = () => {
           </div>
 
           {/* Mock Content */}
-          <div style={{ flex: 1, padding: '2rem 3rem', display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '2.5rem', overflow: 'hidden', backgroundColor: '#f8fafc' }}>
+          <div className="landing-mockup-content" style={{ flex: 1, display: 'grid', gap: '2.5rem', overflow: 'hidden', backgroundColor: '#f8fafc' }}>
 
             {/* Left Column: 정상 이수 대시보드 */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
@@ -229,7 +259,7 @@ const Landing: React.FC = () => {
                 <div style={{ padding: '12px', backgroundColor: 'var(--color-primary)', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', display: 'flex' }}>
                   <Trophy size={32} color="white" />
                 </div>
-                <h2 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 800, color: '#1e293b' }}>공학인증 분석 결과</h2>
+                <h2 className="landing-mockup-title" style={{ margin: 0, fontWeight: 800, color: '#1e293b' }}>공학인증 분석 결과</h2>
               </div>
 
               {/* 전체 진행률 카드 (실제 디자인 적용) */}
@@ -320,18 +350,18 @@ const Landing: React.FC = () => {
       </section>
 
       {/* 특징 섹션 */}
-      <section style={{ padding: '8rem 2rem', backgroundColor: '#FAFAFA' }}>
+      <section className="landing-section" style={{ backgroundColor: '#FAFAFA' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
-            <h2 style={{ fontSize: '2.5rem', fontWeight: 800, color: '#111827', marginBottom: '1.5rem', letterSpacing: '-1px' }}>
+            <h2 className="landing-section-title" style={{ fontWeight: 800, color: '#111827', marginBottom: '1.5rem', letterSpacing: '-1px' }}>
               더 이상 수기로 학점을 계산하지 마세요
             </h2>
-            <p style={{ fontSize: '1.25rem', color: '#6B7280', wordBreak: 'keep-all' }}>
+            <p className="landing-section-desc" style={{ color: '#6B7280', wordBreak: 'keep-all' }}>
               공학인증 이수체계도를 완벽하게 자동화 알고리즘이 모든 것을 분석합니다.
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem' }}>
+          <div className="landing-feature-grid" style={{ display: 'grid', gap: '2rem' }}>
             <FeatureCard
               icon={<BarChart3 size={32} color="#3B82F6" />}
               title="직관적인 결과 대시보드"
@@ -355,21 +385,20 @@ const Landing: React.FC = () => {
       </section>
 
       {/* 하단 CTA 섹션 */}
-      <section style={{ padding: '6rem 2rem', backgroundColor: 'var(--color-primary)', color: 'white', textAlign: 'center' }}>
-        <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '1.5rem' }}>
+      <section className="landing-cta-section" style={{ backgroundColor: 'var(--color-primary)', color: 'white', textAlign: 'center' }}>
+        <h2 className="landing-cta-title" style={{ fontWeight: 800, marginBottom: '1.5rem' }}>
           졸업 준비의 필수 요소, 공학인증 현황을 확인해보세요
         </h2>
-        <p style={{ fontSize: '1.2rem', marginBottom: '3rem', opacity: 0.9 }}>
+        <p className="landing-cta-desc" style={{ marginBottom: '3rem', opacity: 0.9 }}>
           세종대학교 학사정보시스템에서 다운로드한 '기이수 성적표'만 준비해주세요.
         </p>
         <button
+          className="landing-cta-btn"
           onClick={() => navigate('/department')}
           style={{
             backgroundColor: 'white',
             color: 'var(--color-primary)',
             border: 'none',
-            padding: '1.2rem 3rem',
-            fontSize: '1.25rem',
             fontWeight: 800,
             borderRadius: '50px',
             cursor: 'pointer',
