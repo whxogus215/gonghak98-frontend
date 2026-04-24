@@ -320,23 +320,6 @@ const About: React.FC = () => {
           background: 'linear-gradient(180deg, rgba(195,15,35,0.05) 0%, rgba(255,255,255,0) 100%)',
         }}
       >
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            padding: '0.5rem 1rem',
-            borderRadius: '50px',
-            backgroundColor: 'rgba(195, 15, 35, 0.08)',
-            color: 'var(--color-primary)',
-            fontWeight: 700,
-            fontSize: '0.9rem',
-            marginBottom: '2rem',
-          }}
-        >
-          <HelpCircle size={16} /> 서비스 소개
-        </div>
-
         <h1
           className="about-hero-title"
           style={{
