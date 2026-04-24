@@ -107,7 +107,7 @@ const Landing: React.FC = () => {
           gap: '0.5rem',
           boxShadow: '0 4px 10px rgba(195, 15, 35, 0.3)'
         }}>
-          <Zap size={16} fill="currentColor" color="currentColor" /> 복잡한 공학인증을 한 번에
+          <img src="/favicon.svg" alt="logo" style={{ width: 18, height: 18 }} /> 복잡한 공학인증을 한 번에
         </div>
 
         <h1 style={{
