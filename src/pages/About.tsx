@@ -12,6 +12,7 @@ import {
   ChevronDown,
   ChevronUp,
 } from 'lucide-react';
+import KakaoIcon from '../components/KakaoIcon';
 
 /* ───────────────────── FAQ Accordion Item ───────────────────── */
 const FAQItem = ({
@@ -214,6 +215,24 @@ const About: React.FC = () => {
           세종대 공학인증 패스
         </div>
         <div style={{ flex: 1 }} />
+        <a
+          href="https://open.kakao.com/o/se7DqQri"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            marginRight: '1rem',
+            borderRadius: '8px',
+            padding: '6px',
+            transition: 'transform 0.2s, box-shadow 0.2s',
+          }}
+          onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.1)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)'; }}
+          onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = 'none'; }}
+          title="카카오톡 오픈채팅 문의"
+        >
+          <KakaoIcon size={26} />
+        </a>
         <button
           onClick={() => navigate('/')}
           style={{
