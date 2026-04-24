@@ -10,6 +10,7 @@ import DepartmentSelect from './pages/DepartmentSelect';
 import Upload from './pages/Upload';
 import Loading from './pages/Loading';
 import ResultDashboard from './pages/ResultDashboard';
+import About from './pages/About';
 
 // 상태 상자(Context) Provider
 import { AppProvider } from './context/AppContext';
@@ -22,6 +23,9 @@ const App: React.FC = () => {
         <Routes>
           {/* 풀스크린 마케팅 랜딩 페이지 */}
           <Route path="/" element={<Landing />} />
+
+          {/* 서비스 소개 페이지 */}
+          <Route path="/about" element={<About />} />
 
           {/* 나머지 스텝 페이지들은 공통된 StepLayout 블록 안에서 변경됩니다. */}
           <Route element={<StepLayout />}>

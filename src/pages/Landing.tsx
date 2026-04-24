@@ -31,6 +31,23 @@ const Landing: React.FC = () => {
         </div>
         <div style={{ flex: 1 }} />
         <button
+          onClick={() => navigate('/about')}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: '#4B5563',
+            fontWeight: 600,
+            fontSize: '0.95rem',
+            cursor: 'pointer',
+            marginRight: '1.5rem',
+            transition: 'color 0.2s',
+          }}
+          onMouseOver={e => e.currentTarget.style.color = 'var(--color-primary)'}
+          onMouseOut={e => e.currentTarget.style.color = '#4B5563'}
+        >
+          서비스 소개
+        </button>
+        <button
           onClick={() => navigate('/department')}
           style={{
             backgroundColor: 'var(--color-primary)',
