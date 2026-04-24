@@ -7,7 +7,6 @@ import {
   Shield,
   CheckCircle2,
   FileSpreadsheet,
-  HelpCircle,
   ChevronDown,
   ChevronUp,
 } from 'lucide-react';
