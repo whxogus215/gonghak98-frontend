@@ -416,7 +416,7 @@ function ResultDashboard() {
                       <h4 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: '#334155', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         {getAreaLabel(summary.areaType)}
                         {summary.areaType === 'DESIGN' && (
-                          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', backgroundColor: '#e2e8f0', padding: '3px 8px', borderRadius: '6px' }}>
+                          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#ef4444', backgroundColor: '#fef2f2', padding: '3px 8px', borderRadius: '6px' }}>
                             설계 학점 기준
                           </span>
                         )}
@@ -486,8 +486,15 @@ function ResultDashboard() {
                                 <span style={{ fontWeight: 600, color: '#334155' }}>{course.courseName}</span>
                                 <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{course.year}년도 {course.semester}학기 · {course.courseCode}</span>
                               </div>
-                              <span style={{ fontWeight: 700, color: '#3b82f6', backgroundColor: '#eff6ff', padding: '3px 8px', borderRadius: '6px', fontSize: '0.85rem' }}>
-                                {course.credit}학점
+                              <span style={{ 
+                                fontWeight: 700, 
+                                color: summary.areaType === 'DESIGN' ? '#ef4444' : '#3b82f6', 
+                                backgroundColor: summary.areaType === 'DESIGN' ? '#fef2f2' : '#eff6ff', 
+                                padding: '3px 8px', 
+                                borderRadius: '6px', 
+                                fontSize: '0.85rem' 
+                              }}>
+                                {summary.areaType === 'DESIGN' ? `설계 ${course.designCredit || 0}학점` : `${course.credit}학점`}
                               </span>
                             </li>
                           ))}

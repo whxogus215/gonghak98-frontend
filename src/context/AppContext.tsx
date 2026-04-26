@@ -8,6 +8,7 @@ export interface Course {
   year: number;
   semester: number;
   credit: number;
+  designCredit?: number;
 }
 
 export interface CreditSummary {
