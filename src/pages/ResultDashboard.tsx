@@ -29,8 +29,12 @@ function ResultDashboard() {
 
   if (!result) return null;
 
-  const totalCurrentCredit = result.creditSummaries.reduce((sum, item) => sum + item.completedCredits, 0);
-  const totalTargetCredit = result.creditSummaries.reduce((sum, item) => sum + item.requiredCredits, 0);
+  const validCreditSummaries = result.creditSummaries.filter(summary => summary.areaType !== 'NONE');
+  const noneSummary = result.creditSummaries.find(summary => summary.areaType === 'NONE');
+  const notCheckedCourses = noneSummary?.relatedCourses || [];
+
+  const totalCurrentCredit = validCreditSummaries.reduce((sum, item) => sum + item.completedCredits, 0);
+  const totalTargetCredit = validCreditSummaries.reduce((sum, item) => sum + item.requiredCredits, 0);
   const percentage = Math.min(Math.round((totalCurrentCredit / Math.max(totalTargetCredit, 1)) * 100), 100);
 
   const getAreaLabel = (areaType: string) => {
@@ -94,8 +98,10 @@ function ResultDashboard() {
             font-weight: 600;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             z-index: 999;
-            white-space: nowrap;
-            pointer-events: none;
+            white-space: normal;
+            min-width: 280px;
+            pointer-events: auto;
+            line-height: 1.4;
             opacity: 0;
             visibility: hidden;
             transform: translateY(-4px);
@@ -135,7 +141,7 @@ function ResultDashboard() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem', flex: 1, overflowY: 'auto', paddingRight: '0.5rem', paddingBottom: '2rem' }}>
 
         {/* 경고 및 알림 영역 (가로 2열 배치) */}
-        {((result.nonPassResults && result.nonPassResults.length > 0) || (result.notCheckedResults && result.notCheckedResults.length > 0)) && (
+        {((result.nonPassResults && result.nonPassResults.length > 0) || (notCheckedCourses.length > 0)) && (
           <div className="dashboard-grid-2x2">
             {/* 미충족 경고 영역 */}
             {result.nonPassResults && result.nonPassResults.length > 0 && (
@@ -212,8 +218,8 @@ function ResultDashboard() {
               </div>
             )}
 
-            {/* 검사에 포함되지 않은 항목 영역 */}
-            {result.notCheckedResults && result.notCheckedResults.length > 0 && (
+            {/* 공학인증 제외 과목 영역 */}
+            {notCheckedCourses.length > 0 && (
               <div style={{
                 backgroundColor: 'white',
                 borderRadius: '16px',
@@ -230,28 +236,40 @@ function ResultDashboard() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                       <AlertCircle size={24} color="#D97706" style={{ flexShrink: 0 }} />
                       <h4 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: '#92400E' }}>
-                        검사에 포함되지 않은 항목
+                        공학인증 제외 과목
                       </h4>
                     </div>
                   </div>
 
                   {/* 말풍선 툴팁 (CSS 기반) */}
                   <div className="tooltip-bubble">
-                    현재 시스템에 존재하지 않는 과목입니다.
+                    공학인증에 포함되지 않는 과목입니다. 만약, 공학인증 과목이 포함되어 있다면 <a href="https://open.kakao.com/o/se7DqQri" target="_blank" rel="noopener noreferrer" style={{ color: '#60a5fa', textDecoration: 'underline' }}>문의 채널</a>로 제보해 주세요 🫡
                   </div>
 
-                  <span style={{
-                    marginLeft: 'auto',
-                    padding: '4px 10px',
-                    borderRadius: '20px',
-                    fontSize: '0.85rem',
-                    fontWeight: 700,
-                    backgroundColor: '#FEF3C7',
-                    color: '#92400E',
-                    whiteSpace: 'nowrap'
-                  }}>
-                    {result.notCheckedResults.length}건
-                  </span>
+                  <div style={{ marginLeft: 'auto', display: 'flex', gap: '0.5rem' }}>
+                    <span style={{
+                      padding: '4px 10px',
+                      borderRadius: '20px',
+                      fontSize: '0.85rem',
+                      fontWeight: 700,
+                      backgroundColor: '#FEF3C7',
+                      color: '#92400E',
+                      whiteSpace: 'nowrap'
+                    }}>
+                      총 {noneSummary?.completedCredits || 0}학점
+                    </span>
+                    <span style={{
+                      padding: '4px 10px',
+                      borderRadius: '20px',
+                      fontSize: '0.85rem',
+                      fontWeight: 700,
+                      backgroundColor: '#FEF3C7',
+                      color: '#92400E',
+                      whiteSpace: 'nowrap'
+                    }}>
+                      {notCheckedCourses.length}건
+                    </span>
+                  </div>
                 </div>
 
                 <button
@@ -283,7 +301,7 @@ function ResultDashboard() {
                 {isNotCheckedExpanded && (
                   <div style={{ padding: '1rem 1.5rem', backgroundColor: 'white' }}>
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-                      {result.notCheckedResults.map((nc, idx) => (
+                      {notCheckedCourses.map((nc, idx) => (
                         <li key={idx} style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <span style={{ fontWeight: 600, color: '#334155', fontSize: '0.95rem' }}>{nc.courseName}</span>
@@ -377,7 +395,7 @@ function ResultDashboard() {
         <div>
           <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#1e293b', marginBottom: '1.5rem' }}>영역별 상세 이수 내역</h3>
           <div className="dashboard-grid-2x2">
-            {result.creditSummaries.map((summary, idx) => {
+            {validCreditSummaries.map((summary, idx) => {
               const summaryPercentage = Math.min(Math.round((summary.completedCredits / Math.max(summary.requiredCredits, 1)) * 100), 100);
               const isFulfilled = summary.completedCredits >= summary.requiredCredits;
               const isExpanded = expandedAreas[idx] || false;

@@ -31,21 +31,12 @@ export interface NonPassResult {
   reason: string;
 }
 
-export interface NotCheckedResult {
-  courseCode: string;
-  courseName: string;
-  year: number;
-  semester: number;
-  credit: number;
-}
-
 export interface AnalysisResult {
   id: string | null;
   studentName?: string;
   studentId?: string;
   passResults: PassResult[];
   nonPassResults: NonPassResult[];
-  notCheckedResults: NotCheckedResult[];
   creditSummaries: CreditSummary[];
 }
 
