@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Shield, BarChart3, CheckCircle2, Trophy, BookOpen, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import { trackEvent } from '../utils/analytics';
 import KakaoIcon from '../components/KakaoIcon';
 
 const Landing: React.FC = () => {
@@ -113,7 +114,7 @@ const Landing: React.FC = () => {
         </button>
         <button
           className="landing-nav-cta"
-          onClick={() => navigate('/department')}
+          onClick={() => { trackEvent('CTA', 'click_start', 'nav_bar'); navigate('/department'); }}
           style={{
             backgroundColor: 'var(--color-primary)',
             color: 'white',
@@ -210,7 +211,7 @@ const Landing: React.FC = () => {
           </button>
           <button
             className="landing-hero-btn"
-            onClick={() => navigate('/department')}
+            onClick={() => { trackEvent('CTA', 'click_start', 'hero_section'); navigate('/department'); }}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -403,7 +404,7 @@ const Landing: React.FC = () => {
         </p>
         <button
           className="landing-cta-btn"
-          onClick={() => navigate('/department')}
+          onClick={() => { trackEvent('CTA', 'click_start', 'bottom_cta'); navigate('/department'); }}
           style={{
             backgroundColor: 'white',
             color: 'var(--color-primary)',

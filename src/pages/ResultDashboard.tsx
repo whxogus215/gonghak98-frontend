@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Trophy, ArrowLeft, AlertCircle, BookOpen, CheckCircle, XCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
+import { trackEvent } from '../utils/analytics';
 
 function ResultDashboard() {
   const navigate = useNavigate();
@@ -19,6 +20,9 @@ function ResultDashboard() {
     if (!result) {
       alert('분석 결과가 없습니다. 처음부터 다시 시작해주세요.');
       navigate('/');
+    } else {
+      // 결과 대시보드를 열람한 시점을 GA4로 전송
+      trackEvent('Result', 'view_result', 'dashboard');
     }
 
     return () => {

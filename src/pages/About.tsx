@@ -11,6 +11,7 @@ import {
   ChevronUp,
 } from 'lucide-react';
 import KakaoIcon from '../components/KakaoIcon';
+import { trackEvent } from '../utils/analytics';
 
 /* ───────────────────── FAQ Accordion Item ───────────────────── */
 const FAQItem = ({
@@ -303,7 +304,7 @@ const About: React.FC = () => {
         </button>
         <button
           className="about-nav-cta"
-          onClick={() => navigate('/department')}
+          onClick={() => { trackEvent('CTA', 'click_start', 'about_nav_bar'); navigate('/department'); }}
           style={{
             backgroundColor: 'var(--color-primary)',
             color: 'white',
@@ -807,7 +808,7 @@ const About: React.FC = () => {
         </p>
         <button
           className="about-cta-btn"
-          onClick={() => navigate('/department')}
+          onClick={() => { trackEvent('CTA', 'click_start', 'about_bottom_cta'); navigate('/department'); }}
           style={{
             backgroundColor: 'white',
             color: 'var(--color-primary)',
